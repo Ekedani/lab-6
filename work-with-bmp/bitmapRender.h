@@ -25,6 +25,10 @@ private:
     //Запись строки массива в файл
     void writeLine(std::ofstream &file, int proceededLines) const;
 
+    void writeHeader(const std::string& filePath){
+        
+    }
+
 public:
     //Запись в .bmp файл
     void writeToFile(const std::string& filePath);
@@ -32,10 +36,12 @@ public:
     //Оператор индексации, чтобы тебе жилось проще
     Pixel*& operator[](int index);
 
-    //TODO: вспомнить как вычислялся filesize
+    //Конструктор
     bitmapRender(int32_t width, int32_t depth);
 
-    void writeHeader(const std::string& filePath){
-
+    //Запись в файл
+    void writeImage(const std::string& filePath){
+        writeHeader(filePath);
+        writePixelsToFile(filePath);
     }
 };

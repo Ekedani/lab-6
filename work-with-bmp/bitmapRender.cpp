@@ -15,6 +15,8 @@ bitmapRender::bitmapRender(int32_t width, int32_t depth) {
     for (int i = 0; i < depth; ++i) {
         pixels[i] = new Pixel[width];
     }
+    int delta = 4 - (width % 4);
+    this->filesize = 54 + (depth * width) * 3 + delta * width;
 }
 
 void bitmapRender::writePixelsToFile(const std::string &address) const {
