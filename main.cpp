@@ -4,8 +4,6 @@
 using namespace std;
 
 int main() {
-
     vector<Triangle*> testVec;
     testVec = objFileReader::readTriangles("G:\\cow.obj");
-
 }
