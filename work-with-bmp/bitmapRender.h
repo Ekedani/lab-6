@@ -16,6 +16,21 @@ private:
     int32_t width;
     int32_t depth;
 
+    //Дефолтная информация, которая нужна только для записи
+    int8_t id[2];
+    int16_t reserved[2];
+    int32_t headersize;
+    int32_t infoSize;
+    int16_t biPlanes;
+    int16_t bits;
+    int32_t biCompression;
+    int32_t biSizeImage;
+    int32_t biXPelsPerMeter;
+    int32_t biYPelsPerMeter;
+    int32_t biClrUsed;
+    int32_t biClrImportant;
+
+
     //Информация о пикселях
     Pixel** pixels;
 
@@ -25,9 +40,8 @@ private:
     //Запись строки массива в файл
     void writeLine(std::ofstream &file, int proceededLines) const;
 
-    void writeHeader(const std::string& filePath){
-        
-    }
+    //Запись хедера в файл
+    void writeHeader(const std::string& filePath);
 
 public:
     //Запись в .bmp файл
@@ -39,9 +53,9 @@ public:
     //Конструктор
     bitmapRender(int32_t width, int32_t depth);
 
-    //Запись в файл
-    void writeImage(const std::string& filePath){
-        writeHeader(filePath);
-        writePixelsToFile(filePath);
-    }
+    //Геттеры глубины и ширины
+    int32_t getWidth() const;
+    int32_t getDepth() const;
+
+
 };
