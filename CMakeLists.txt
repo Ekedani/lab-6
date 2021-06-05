@@ -3,4 +3,4 @@ project(lab_6)
 
 set(CMAKE_CXX_STANDARD 17)
 
-add_executable(lab_6 main.cpp)
+add_executable(lab_6 main.cpp data-struct/triangle.cpp data-struct/triangle.h obj-reader/objFileReader.cpp obj-reader/objFileReader.h)

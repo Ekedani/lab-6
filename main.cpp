@@ -1,6 +1,11 @@
 #include <iostream>
+#include "obj-reader/objFileReader.h"
+
+using namespace std;
 
 int main() {
-    std::cout << "Hello, World!" << std::endl;
-    return 0;
+
+    vector<Triangle*> testVec;
+    testVec = objFileReader::readTriangles("G:\\cow.obj");
+
 }
