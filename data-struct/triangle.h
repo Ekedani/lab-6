@@ -1,4 +1,7 @@
 #pragma once
+#include <iostream>
+
+using namespace std;
 
 struct Point{
     double xCoord;
@@ -41,27 +44,35 @@ public:
 struct Line {
     Point* p1;
     Point* p2;
-    float triangle_intersection(const Triangle& triangle) {
+    double triangle_intersection(const Triangle& triangle) {
+        /* DEBUG
+        cout << "vert1: " << triangle.firstVertex->xCoord << " " << triangle.firstVertex->yCoord
+        << " " << triangle.firstVertex->zCoord << endl;
+        cout << "vert2: " << triangle.secondVertex->xCoord << " " << triangle.secondVertex->yCoord
+             << " " << triangle.secondVertex->zCoord << endl;
+        cout << "vert3: " << triangle.secondVertex->xCoord << " " << triangle.secondVertex->yCoord
+             << " " << triangle.secondVertex->zCoord << endl;
+        */
         Vector3 dir(p2->xCoord, p2->yCoord, p2->zCoord);
 
         Vector3 e1(*triangle.firstVertex, *triangle.secondVertex);
         Vector3 e2(*triangle.firstVertex, *triangle.thirdVertex);
 
         Vector3 pvec = Vector3::cross(dir, e2);
-        float det = Vector3::dot(e1, pvec);
+        double det = Vector3::dot(e1, pvec);
 
         if (det < 1e-8 && det > -1e-8) {
             return 0;
         }
 
-        float inv_det = 1 / det;
+        double inv_det = 1 / det;
         Vector3 tvec(*triangle.firstVertex, *p1);
-        float u = Vector3::dot(tvec, pvec) * inv_det;
+        double u = Vector3::dot(tvec, pvec) * inv_det;
         if (u < 0 || u > 1) {
             return 0;
         }
         Vector3 qvec = Vector3::cross(tvec, e1);
-        float v = Vector3::dot(dir, qvec) * inv_det;
+        double v = Vector3::dot(dir, qvec) * inv_det;
         if (v < 0 || u + v > 1) {
             return 0;
         }
