@@ -37,3 +37,34 @@ public:
         return Vector3(x,y,z);
     }
 };
+
+struct Line {
+    Point* p1;
+    Point* p2;
+    float triangle_intersection(const Triangle& triangle) {
+        Vector3 dir(p2->xCoord, p2->yCoord, p2->zCoord);
+
+        Vector3 e1(*triangle.firstVertex, *triangle.secondVertex);
+        Vector3 e2(*triangle.firstVertex, *triangle.thirdVertex);
+
+        Vector3 pvec = Vector3::cross(dir, e2);
+        float det = Vector3::dot(e1, pvec);
+
+        if (det < 1e-8 && det > -1e-8) {
+            return 0;
+        }
+
+        float inv_det = 1 / det;
+        Vector3 tvec(*triangle.firstVertex, *p1);
+        float u = Vector3::dot(tvec, pvec) * inv_det;
+        if (u < 0 || u > 1) {
+            return 0;
+        }
+        Vector3 qvec = Vector3::cross(tvec, e1);
+        float v = Vector3::dot(dir, qvec) * inv_det;
+        if (v < 0 || u + v > 1) {
+            return 0;
+        }
+        return Vector3::dot(e2, qvec) * inv_det;
+    }
+};
