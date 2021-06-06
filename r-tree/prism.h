@@ -4,4 +4,8 @@ class Prism {
 private:
 
 public:
+
+    double volume(){
+
+    }
 };
