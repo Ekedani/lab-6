@@ -53,7 +53,7 @@ std::vector<Point *> objFileReader::readVertices(std::ifstream& filePtr) {
         newPoint->xCoord = std::stod(curLine.substr(0, curLine.find(' ')));
         curLine.erase(0, curLine.find(' ') + 1);
 
-        newPoint->xCoord = std::stod(curLine.substr(0, curLine.find(' ')));
+        newPoint->yCoord = std::stod(curLine.substr(0, curLine.find(' ')));
         curLine.erase(0, curLine.find(' ') + 1);
 
         newPoint->zCoord = std::stod(curLine);
