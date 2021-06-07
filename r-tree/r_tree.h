@@ -98,7 +98,43 @@ public:
         //}
     }
 
+    std::vector<Triangle*> findObjectsUsingRay(Line curRay){
+        std::vector<Triangle*> result;
+        if(root->isLeaf()){
+            for (auto & object : root->objects) {
+                if(curRay.triangle_intersection(*object->triangle) != 0){
+                    result.push_back(object->triangle);
+                }
+            }
+        }
+        else{
+            for (auto & node : root->nodes) {
+                //TODO:
+                //if(curRay.doesIntersect(node->MBP)){
+                //    findObjectsUsingRay(curRay, node, result);
+                //}
+            }
+        }
+        return result;
+    }
 
+    void findObjectsUsingRay(Line curRay, Node* curNode, std::vector<Triangle*> &result){
+        if(curNode->isLeaf()){
+            for (auto & object : curNode->objects) {
+                if(curRay.triangle_intersection(*object->triangle) != 0){
+                    result.push_back(object->triangle);
+                }
+            }
+        }
+        else{
+            for (auto & node : curNode->nodes) {
+                //TODO:
+                //if(curRay.doesIntersect(node->MBP)){
+                //    findObjectsUsingRay(curRay, node, result);
+                //}
+            }
+        }
+    }
 };
 
 
