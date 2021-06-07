@@ -21,11 +21,20 @@ Prism::Prism(const Prism &prism) {
 Prism &Prism::operator=(const Prism &prism) {
     if (this == &prism) return *this;
 
-    this->firstPoint = new Point;
-    *this->firstPoint = *prism.firstPoint;
+    if (prism.getFirstPoint() != nullptr) {
+        this->firstPoint = new Point;
+        *this->firstPoint = *prism.firstPoint;
+    } else {
+        this->firstPoint = nullptr;
+    }
 
-    this->secondPoint = new Point;
-    *this->secondPoint = *prism.secondPoint;
+    if (prism.getSecondPoint() != nullptr) {
+        this->secondPoint = new Point;
+        *this->secondPoint = *prism.secondPoint;
+    } else {
+        this->secondPoint = nullptr;
+    }
+    return *this;
 }
 
 double Prism::volume() const {
