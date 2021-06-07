@@ -103,5 +103,38 @@ struct Line {
 
     bool doesIntersectParallelepiped(const Prism& prism) {
 
+        Point firstPoint = *prism.getFirstPoint();
+        Point secondPoint = *prism.getSecondPoint();
+
+        double x_1 = firstPoint.xCoord;
+        double y_1 = firstPoint.yCoord;
+        double z_1 = firstPoint.zCoord;
+
+        double x_2 = secondPoint.xCoord;
+        double y_2 = secondPoint.yCoord;
+        double z_2 = secondPoint.zCoord;
+
+        if (prism.isInside(this->locationWhenX(x_1))) {
+            return true;
+        }
+        if (prism.isInside(this->locationWhenX(x_2))) {
+            return true;
+        }
+
+        if (prism.isInside(this->locationWhenY(y_1))) {
+            return true;
+        }
+        if (prism.isInside(this->locationWhenY(y_2))) {
+            return true;
+        }
+
+        if (prism.isInside(this->locationWhenZ(z_1))) {
+            return true;
+        }
+        if (prism.isInside(this->locationWhenZ(z_2))) {
+            return true;
+        }
+
+        return false;
     }
 };

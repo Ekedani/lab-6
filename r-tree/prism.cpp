@@ -41,7 +41,7 @@ Prism &Prism::operator=(const Prism &prism) {
     return *this;
 }
 
-bool Prism::isInside(const Point &point) {
+bool Prism::isInside(const Point &point) const {
     if (!(point.xCoord >= this->firstPoint->xCoord && point.xCoord <= this->secondPoint->xCoord)) {
         return false;
     }

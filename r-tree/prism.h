@@ -16,7 +16,7 @@ public:
 
     Prism &operator=(const Prism &prism);
 
-    bool isInside(const Point &point);
+    bool isInside(const Point &point) const;
 
     double volume() const;
 
