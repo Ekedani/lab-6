@@ -1,4 +1,8 @@
 #include "prism.h"
+#include <algorithm>
+#include <iostream>
+using namespace std;
+
 
 Prism::Prism() {
     firstPoint = nullptr;

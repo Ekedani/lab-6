@@ -1,5 +1,5 @@
-#include "../data-struct/triangle.h"
-#include <algorithm>
+#pragma once
+#include "../data-struct/Point.h"
 
 class Prism {
 private:

@@ -1,5 +1,5 @@
 #include <vector>
-#include "prism.h"
+#include "../data-struct/triangle.h"
 #include <cfloat>
 
 struct TriangleLeaf {
