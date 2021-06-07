@@ -79,6 +79,28 @@ struct Line {
         return location;
     }
 
+    Point locationWhenY(double y) {
+        double deltaX = p2->xCoord - p1->xCoord;
+        double deltaY = p2->yCoord - p1->yCoord;
+        double deltaZ = p2->zCoord - p1->zCoord;
+
+        double x_component = (y - p1->yCoord)*deltaX/deltaY + p1->xCoord;
+        double z_component = (y - p1->yCoord)*deltaZ/deltaY + p1->zCoord;
+        Point location{x_component, y, z_component};
+        return location;
+    }
+
+    Point locationWhenZ(double z) {
+        double deltaX = p2->xCoord - p1->xCoord;
+        double deltaY = p2->yCoord - p1->yCoord;
+        double deltaZ = p2->zCoord - p1->zCoord;
+
+        double x_component = (z - p1->zCoord)*deltaX/deltaZ + p1->xCoord;
+        double y_component = (z - p1->zCoord)*deltaY/deltaZ + p1->yCoord;
+        Point location{x_component, y_component, z};
+        return location;
+    }
+
     bool doesIntersectParallelepiped(const Prism& prism) {
 
     }
