@@ -17,6 +17,24 @@ public:
         secondPoint = p2;
     }
 
+    Prism(const Prism& prism) {
+        this->firstPoint = new Point;
+        *this->firstPoint = *prism.firstPoint;
+
+        this->secondPoint = new Point;
+        *this->secondPoint = *prism.secondPoint;
+    }
+
+    Prism& operator=(const Prism& prism){
+        if (this == &prism) return *this;
+
+        this->firstPoint = new Point;
+        *this->firstPoint = *prism.firstPoint;
+
+        this->secondPoint = new Point;
+        *this->secondPoint = *prism.secondPoint;
+    }
+
     double volume() const{
         if (firstPoint == nullptr || secondPoint == nullptr) {
             cout << "nullptr is caught" << endl;
@@ -74,5 +92,20 @@ public:
         extended.secondPoint = extendedSecond;
 
         return extended;
+    }
+
+    double volumeIncreasing(const Point& point){
+        double volumeBefore = this->volume();
+        double volumeAfter = this->extend(point).volume();
+        return volumeAfter - volumeBefore;
+    }
+
+    double volumeIncreasing(const Prism& prism){
+        double volumeBefore = this->volume();
+        Prism extended = this->extend(*prism.firstPoint);
+        extended = extended.extend(*prism.secondPoint);
+
+        double volumeAfter = extended.volume();
+        return volumeAfter - volumeBefore;
     }
 };
