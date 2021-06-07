@@ -18,6 +18,10 @@ public:
     }
 
     double volume() const{
+        if (firstPoint == nullptr || secondPoint == nullptr) {
+            cout << "nullptr is caught" << endl;
+            return 0;
+        }
         double a = secondPoint->xCoord - firstPoint->xCoord;
         double b = secondPoint->yCoord - firstPoint->yCoord;
         double c = secondPoint->zCoord - firstPoint->zCoord;
@@ -42,13 +46,33 @@ public:
         return this->Intersection(prism).volume();
     }
 
-    void extend(const Point& point){
-        this->firstPoint->xCoord = min(this->firstPoint->xCoord, point.xCoord);
-        this->firstPoint->yCoord = min(this->firstPoint->yCoord, point.yCoord);
-        this->firstPoint->zCoord = min(this->firstPoint->zCoord, point.zCoord);
+    Prism extend(const Point& point){
+        if (this->firstPoint == nullptr) {
+            cout << "firstPoint nullptr is caught" << endl;
+            return Prism();
+        }
 
-        this->secondPoint->xCoord = max(this->secondPoint->xCoord, point.xCoord);
-        this->secondPoint->yCoord = max(this->secondPoint->yCoord, point.yCoord);
-        this->secondPoint->zCoord = max(this->secondPoint->zCoord, point.zCoord);
+        if (this->secondPoint == nullptr) {
+            cout << "secondPoint nullptr is caught" << endl;
+            return Prism();
+        }
+
+        Prism extended;
+        double firstX = min(this->firstPoint->xCoord, point.xCoord);
+        double firstY = min(this->firstPoint->yCoord, point.yCoord);
+        double firstZ = min(this->firstPoint->zCoord, point.zCoord);
+        auto* extendedFirst = new Point;
+        *extendedFirst = Point{firstX, firstY, firstZ};
+
+        double secondX = max(this->secondPoint->xCoord, point.xCoord);
+        double secondY = max(this->secondPoint->yCoord, point.yCoord);
+        double secondZ = max(this->secondPoint->zCoord, point.zCoord);
+        auto* extendedSecond = new Point;
+        *extendedSecond = Point{secondX, secondY, secondZ};
+
+        extended.firstPoint = extendedFirst;
+        extended.secondPoint = extendedSecond;
+
+        return extended;
     }
 };
