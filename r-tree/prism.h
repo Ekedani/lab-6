@@ -41,4 +41,14 @@ public:
     double overlapVolume(const Prism& prism) {
         return this->Intersection(prism).volume();
     }
+
+    void extend(const Point& point){
+        this->firstPoint->xCoord = min(this->firstPoint->xCoord, point.xCoord);
+        this->firstPoint->yCoord = min(this->firstPoint->yCoord, point.yCoord);
+        this->firstPoint->zCoord = min(this->firstPoint->zCoord, point.zCoord);
+
+        this->secondPoint->xCoord = max(this->secondPoint->xCoord, point.xCoord);
+        this->secondPoint->yCoord = max(this->secondPoint->yCoord, point.yCoord);
+        this->secondPoint->zCoord = max(this->secondPoint->zCoord, point.zCoord);
+    }
 };
