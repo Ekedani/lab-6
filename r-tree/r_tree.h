@@ -6,6 +6,7 @@ struct TriangleLeaf {
     Triangle *triangle;
     Prism MBP;
     TriangleLeaf(Triangle *t){
+        triangle = t;
         MBP = Prism();
         MBP = MBP.extend(*t->firstVertex);
         MBP = MBP.extend(*t->secondVertex);
