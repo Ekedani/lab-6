@@ -6,13 +6,7 @@ struct TriangleLeaf {
     Triangle *triangle;
     Prism MBP;
 
-    TriangleLeaf(Triangle *t) {
-        triangle = t;
-        MBP = Prism();
-        MBP = MBP.extend(*t->firstVertex);
-        MBP = MBP.extend(*t->secondVertex);
-        MBP = MBP.extend(*t->thirdVertex);
-    }
+    explicit TriangleLeaf(Triangle *t);
 };
 
 struct Node {
@@ -21,24 +15,11 @@ struct Node {
     std::vector<TriangleLeaf *> objects;
     std::vector<Node *> nodes;
 
-    Node() {
-        parentNode = nullptr;
-    }
+    Node();
 
-    bool isLeaf() const {
-        return nodes.empty();
-    }
+    bool isLeaf() const;
 
-    void updateMBP() {
-        for (auto &object : objects) {
-            MBP = MBP.extend(*object->MBP.getFirstPoint());
-            MBP = MBP.extend(*object->MBP.getSecondPoint());
-        }
-        for (auto &node : nodes) {
-            MBP = MBP.extend(*node->MBP.getFirstPoint());
-            MBP = MBP.extend(*node->MBP.getSecondPoint());
-        }
-    }
+    void updateMBP();
 };
 
 

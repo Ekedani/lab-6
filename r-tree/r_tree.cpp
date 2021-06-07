@@ -243,18 +243,17 @@ Node *rTree::chooseSubtree(Node *start, const TriangleLeaf &newTriangle) {
     Node *chosen = nullptr;
     if (start->isLeaf()) {
         return start;
-    }
-    else {
+    } else {
         int index;
         auto minimalMBPIncreasingVolume = DBL_MAX;
-        for (auto & node : start->nodes) {
-            if (node->MBP.volumeIncreasing(newTriangle.MBP) < minimalMBPIncreasingVolume){
+        for (auto &node : start->nodes) {
+            if (node->MBP.volumeIncreasing(newTriangle.MBP) < minimalMBPIncreasingVolume) {
                 minimalMBPIncreasingVolume = node->MBP.volumeIncreasing(newTriangle.MBP);
             }
         }
         auto minimalVolume = DBL_MAX;
         for (int i = 0; i < start->nodes.size(); ++i) {
-            if (start->nodes[i]->MBP.volumeIncreasing(newTriangle.MBP) == minimalMBPIncreasingVolume){
+            if (start->nodes[i]->MBP.volumeIncreasing(newTriangle.MBP) == minimalMBPIncreasingVolume) {
                 if (start->nodes[i]->MBP.volume() < minimalVolume) {
                     minimalVolume = start->nodes[i]->MBP.volume();
                     index = i;
@@ -272,14 +271,13 @@ void rTree::insertTriangle(Triangle *curTriangle) {
 
 
     //Если узел не переполнен
-    if(chosenNode->objects.size() < maxCount){
+    if (chosenNode->objects.size() < maxCount) {
         chosenNode->objects.push_back(newObj);
-        while(chosenNode != nullptr){
+        while (chosenNode != nullptr) {
             chosenNode->updateMBP();
             chosenNode = chosenNode->parentNode;
         }
-    }
-    else{
+    } else {
         splitLeafNode(chosenNode, newObj);
     }
 }
@@ -292,4 +290,31 @@ rTree::rTree() {
     root = new Node;
     root->parentNode = nullptr;
     root->updateMBP();
+}
+
+void Node::updateMBP() {
+    for (auto &object : objects) {
+        MBP = MBP.extend(*object->MBP.getFirstPoint());
+        MBP = MBP.extend(*object->MBP.getSecondPoint());
+    }
+    for (auto &node : nodes) {
+        MBP = MBP.extend(*node->MBP.getFirstPoint());
+        MBP = MBP.extend(*node->MBP.getSecondPoint());
+    }
+}
+
+bool Node::isLeaf() const {
+    return nodes.empty();
+}
+
+Node::Node() {
+    parentNode = nullptr;
+}
+
+TriangleLeaf::TriangleLeaf(Triangle *t) {
+    triangle = t;
+    MBP = Prism();
+    MBP = MBP.extend(*t->firstVertex);
+    MBP = MBP.extend(*t->secondVertex);
+    MBP = MBP.extend(*t->thirdVertex);
 }
