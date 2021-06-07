@@ -1,10 +1,10 @@
 #pragma once
+#include "Point.h"
+#include "../r-tree/prism.h"
+#include <iostream>
+#include <cmath>
 
-struct Point{
-    double xCoord;
-    double yCoord;
-    double zCoord;
-};
+using namespace std;
 
 struct Triangle {
     Point* firstVertex;
@@ -41,30 +41,100 @@ public:
 struct Line {
     Point* p1;
     Point* p2;
-    float triangle_intersection(const Triangle& triangle) {
+    double triangle_intersection(const Triangle& triangle) const {
         Vector3 dir(p2->xCoord, p2->yCoord, p2->zCoord);
 
         Vector3 e1(*triangle.firstVertex, *triangle.secondVertex);
         Vector3 e2(*triangle.firstVertex, *triangle.thirdVertex);
 
         Vector3 pvec = Vector3::cross(dir, e2);
-        float det = Vector3::dot(e1, pvec);
+        double det = Vector3::dot(e1, pvec);
 
         if (det < 1e-8 && det > -1e-8) {
             return 0;
         }
 
-        float inv_det = 1 / det;
+        double inv_det = 1 / det;
         Vector3 tvec(*triangle.firstVertex, *p1);
-        float u = Vector3::dot(tvec, pvec) * inv_det;
+        double u = Vector3::dot(tvec, pvec) * inv_det;
         if (u < 0 || u > 1) {
             return 0;
         }
         Vector3 qvec = Vector3::cross(tvec, e1);
-        float v = Vector3::dot(dir, qvec) * inv_det;
+        double v = Vector3::dot(dir, qvec) * inv_det;
         if (v < 0 || u + v > 1) {
             return 0;
         }
         return Vector3::dot(e2, qvec) * inv_det;
+    }
+
+    Point locationWhenX(double x) {
+        double deltaX = p2->xCoord - p1->xCoord;
+        double deltaY = p2->yCoord - p1->yCoord;
+        double deltaZ = p2->zCoord - p1->zCoord;
+
+        double y_component = (x - p1->xCoord)*deltaY/deltaX + p1->yCoord;
+        double z_component = (x - p1->xCoord)*deltaZ/deltaX + p1->zCoord;
+        Point location{x, y_component, z_component};
+        return location;
+    }
+
+    Point locationWhenY(double y) {
+        double deltaX = p2->xCoord - p1->xCoord;
+        double deltaY = p2->yCoord - p1->yCoord;
+        double deltaZ = p2->zCoord - p1->zCoord;
+
+        double x_component = (y - p1->yCoord)*deltaX/deltaY + p1->xCoord;
+        double z_component = (y - p1->yCoord)*deltaZ/deltaY + p1->zCoord;
+        Point location{x_component, y, z_component};
+        return location;
+    }
+
+    Point locationWhenZ(double z) {
+        double deltaX = p2->xCoord - p1->xCoord;
+        double deltaY = p2->yCoord - p1->yCoord;
+        double deltaZ = p2->zCoord - p1->zCoord;
+
+        double x_component = (z - p1->zCoord)*deltaX/deltaZ + p1->xCoord;
+        double y_component = (z - p1->zCoord)*deltaY/deltaZ + p1->yCoord;
+        Point location{x_component, y_component, z};
+        return location;
+    }
+
+    bool doesIntersectParallelepiped(const Prism& prism) {
+
+        Point firstPoint = *prism.getFirstPoint();
+        Point secondPoint = *prism.getSecondPoint();
+
+        double x_1 = firstPoint.xCoord;
+        double y_1 = firstPoint.yCoord;
+        double z_1 = firstPoint.zCoord;
+
+        double x_2 = secondPoint.xCoord;
+        double y_2 = secondPoint.yCoord;
+        double z_2 = secondPoint.zCoord;
+
+        if (prism.isInside(this->locationWhenX(x_1))) {
+            return true;
+        }
+        if (prism.isInside(this->locationWhenX(x_2))) {
+            return true;
+        }
+
+        if (prism.isInside(this->locationWhenY(y_1))) {
+            return true;
+        }
+        if (prism.isInside(this->locationWhenY(y_2))) {
+            return true;
+        }
+
+        if (prism.isInside(this->locationWhenZ(z_1))) {
+            return true;
+        }
+        if (prism.isInside(this->locationWhenZ(z_2))) {
+            return true;
+        }
+
+        return false;
     }
 };

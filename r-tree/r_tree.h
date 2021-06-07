@@ -1,30 +1,25 @@
 #include <vector>
-#include "prism.h"
+#include "../data-struct/triangle.h"
 #include <cfloat>
 
-struct TriangleLeaf{
-    Triangle* triangle;
+struct TriangleLeaf {
+    Triangle *triangle;
     Prism MBP;
+
+    explicit TriangleLeaf(Triangle *t);
 };
 
-struct Node{
+struct Node {
     Node *parentNode;
     Prism MBP;
-    std::vector<TriangleLeaf*> objects;
-    std::vector<Node*> nodes;
+    std::vector<TriangleLeaf *> objects;
+    std::vector<Node *> nodes;
 
-    Node(){
-        parentNode = nullptr;
-    }
+    Node();
 
-    bool isLeaf() const{
-        return nodes.empty();
-    }
+    bool isLeaf() const;
 
-    void updateMBP(){
-        //если есть обьекты
-        //если есть дочерние ноды
-    }
+    void updateMBP();
 };
 
 
@@ -37,66 +32,33 @@ private:
     const static int minCount = 6;
     const static int maxCount = 16;
 
+    //Сортировки по оси OX
+    static int sortObjectsByAxis(const void *a, const void *b);
+
+    static int sortNodesByAxis(const void *a, const void *b);
+
+    //Разделение узлов
+    void splitLeafNode(Node *curNode, TriangleLeaf *curObj);
+
+    void splitNotLeafNode(Node *curNode, Node *insertedNode);
+
+    //Вспомогательный метод поиска
+    static void findObjectsUsingRay(Line curRay, Node *curNode, std::vector<Triangle *> &result);
+
+    //Выбор поддерева
+    Node *chooseSubtree(const TriangleLeaf &newTriangle);
+
+    Node *chooseSubtree(Node *start, const TriangleLeaf &newTriangle);
+
 public:
+    //Конструктор
+    rTree();
 
-    rTree(){
-        root = new Node;
-        root->parentNode = nullptr;
-        root->updateMBP();
-    }
+    //Вставка треугольника в дерево
+    void insertTriangle(Triangle *curTriangle);
 
-    //TODO: Переписать методы из старого R дерева
-    Node* chooseSubtree(Triangle newTriangle){
-        return chooseSubtree(root, newTriangle);
-    }
-
-    Node* chooseSubtree(Node* start, Triangle newTriangle){
-        Node* chosen = nullptr;
-        if (start->isLeaf()){
-            return start;
-        }
-        else {
-            int index;
-            //TODO: выбор по объему
-            //Point point (new_place.longitude,new_place.latitude);
-            double minimalMBPIncreasingVolume = DBL_MAX;
-            //for (int i = 0; i < start->nodes.size(); ++i) {
-            //    if (start->nodes[i]->MBP.HowMuchIncreasesTheVolume(point) < minimalMBPIncreasingVolume){
-            //        minimalMBPIncreasingVolume = start->nodes[i]->MBP.HowMuchIncreasesTheVolume(point);
-            //    }
-            //}
-            //double minimalVolume = DBL_MAX;
-            //for (int i = 0; i < start->nodes.size(); ++i) {
-            //    if (start->nodes[i]->MBP.HowMuchIncreasesTheVolume(point) == minimal_mbr_increasing_area){
-            //        if (start->nodes[i]->MBP.volume() < minimalVolume) {
-            //            minimalVolume = start->nodes[i]->MBP.volume();
-            //            index = i;
-            //        }
-            //    }
-            //}
-            //chosen = start->nodes[index];
-        }
-        //return chooseSubtree(chosen, new_place);
-    }
-
-    void insertTriangle(Triangle& curTriangle){
-        Node *chosenNode = chooseSubtree(root, curTriangle);
-        Triangle *ptrToTriangle = &curTriangle;
-
-        //TODO: Создать ограничивающий параллелепипед и объект листка
-
-        ////Если узел не переполнен
-        //if(chosenNode->objects.size() < maxCount){
-        //    chosenNode->objects.push_back(ptrToPlace);
-        //    while(chosenNode != nullptr){
-        //        chosenNode->updateMBR();
-        //        chosenNode = chosenNode->parentNode;
-        //    }
-        //}
-        //else{
-        //    splitLeafNode(chosenNode, ptrToPlace);
-        //}
-    }
+    //Метод поиска по лучу
+    std::vector<Triangle *> findObjectsUsingRay(Line curRay);
 
 
 };
