@@ -98,43 +98,19 @@ public:
         //}
     }
 
-    std::vector<Triangle*> findObjectsUsingRay(Line curRay){
-        std::vector<Triangle*> result;
-        if(root->isLeaf()){
-            for (auto & object : root->objects) {
-                if(curRay.triangle_intersection(*object->triangle) != 0){
-                    result.push_back(object->triangle);
-                }
-            }
-        }
-        else{
-            for (auto & node : root->nodes) {
-                //TODO:
-                //if(curRay.doesIntersect(node->MBP)){
-                //    findObjectsUsingRay(curRay, node, result);
-                //}
-            }
-        }
-        return result;
-    }
+    //Методы поиска (Нижний, желательно, перенести в приватные)
+    std::vector<Triangle*> findObjectsUsingRay(Line curRay);
+    static void findObjectsUsingRay(Line curRay, Node* curNode, std::vector<Triangle*> &result);
 
-    void findObjectsUsingRay(Line curRay, Node* curNode, std::vector<Triangle*> &result){
-        if(curNode->isLeaf()){
-            for (auto & object : curNode->objects) {
-                if(curRay.triangle_intersection(*object->triangle) != 0){
-                    result.push_back(object->triangle);
-                }
-            }
-        }
-        else{
-            for (auto & node : curNode->nodes) {
-                //TODO:
-                //if(curRay.doesIntersect(node->MBP)){
-                //    findObjectsUsingRay(curRay, node, result);
-                //}
-            }
-        }
-    }
+    //Разделение узлов, тоже надо перенести в приватные
+    void splitLeafNode(Node *curNode, TriangleLeaf *curObj);
+    void splitNotLeafNode(Node *curNode, Node *insertedNode);
+
+    //Сортировки по оси OX
+    static int sortObjectsByAxis (const void *a, const void *b);
+    static int sortNodesByAxis (const void *a, const void *b);
+
+
 };
 
 

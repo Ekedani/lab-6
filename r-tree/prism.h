@@ -2,7 +2,8 @@
 
 class Prism {
 private:
-
+    Point firstPoint;
+    Point secondPoint;
 public:
 
     double volume(){
