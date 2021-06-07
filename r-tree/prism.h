@@ -37,4 +37,8 @@ public:
         Prism IntersectionPrism(intersectionFirst, intersectionSecond);
         return IntersectionPrism;
     }
+
+    double overlapVolume(const Prism& prism) {
+        return this->Intersection(prism).volume();
+    }
 };
