@@ -36,6 +36,7 @@ double Prism::volume() const {
     double a = secondPoint->xCoord - firstPoint->xCoord;
     double b = secondPoint->yCoord - firstPoint->yCoord;
     double c = secondPoint->zCoord - firstPoint->zCoord;
+    if (a <= 0 || b <= 0 || c <= 0) return 0;
     return a * b * c;
 }
 
