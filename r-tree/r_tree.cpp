@@ -238,3 +238,58 @@ int rTree::sortNodesByAxis(const void *a, const void *b) {
         return 1;
     }
 }
+
+Node *rTree::chooseSubtree(Node *start, const TriangleLeaf &newTriangle) {
+    Node *chosen = nullptr;
+    if (start->isLeaf()) {
+        return start;
+    }
+    else {
+        int index;
+        auto minimalMBPIncreasingVolume = DBL_MAX;
+        for (auto & node : start->nodes) {
+            if (node->MBP.volumeIncreasing(newTriangle.MBP) < minimalMBPIncreasingVolume){
+                minimalMBPIncreasingVolume = node->MBP.volumeIncreasing(newTriangle.MBP);
+            }
+        }
+        auto minimalVolume = DBL_MAX;
+        for (int i = 0; i < start->nodes.size(); ++i) {
+            if (start->nodes[i]->MBP.volumeIncreasing(newTriangle.MBP) == minimalMBPIncreasingVolume){
+                if (start->nodes[i]->MBP.volume() < minimalVolume) {
+                    minimalVolume = start->nodes[i]->MBP.volume();
+                    index = i;
+                }
+            }
+        }
+        chosen = start->nodes[index];
+    }
+    return chooseSubtree(chosen, newTriangle);
+}
+
+void rTree::insertTriangle(Triangle *curTriangle) {
+    auto *newObj = new TriangleLeaf(curTriangle);
+    Node *chosenNode = chooseSubtree(root, *newObj);
+
+
+    //Если узел не переполнен
+    if(chosenNode->objects.size() < maxCount){
+        chosenNode->objects.push_back(newObj);
+        while(chosenNode != nullptr){
+            chosenNode->updateMBP();
+            chosenNode = chosenNode->parentNode;
+        }
+    }
+    else{
+        splitLeafNode(chosenNode, newObj);
+    }
+}
+
+Node *rTree::chooseSubtree(const TriangleLeaf &newTriangle) {
+    return chooseSubtree(root, newTriangle);
+}
+
+rTree::rTree() {
+    root = new Node;
+    root->parentNode = nullptr;
+    root->updateMBP();
+}
