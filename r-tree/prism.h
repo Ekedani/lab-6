@@ -16,6 +16,8 @@ public:
 
     Prism &operator=(const Prism &prism);
 
+    bool isInside(const Point &point);
+
     double volume() const;
 
     Prism Intersection(const Prism &prism);

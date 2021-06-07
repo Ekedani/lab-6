@@ -37,6 +37,19 @@ Prism &Prism::operator=(const Prism &prism) {
     return *this;
 }
 
+bool Prism::isInside(const Point &point) {
+    if (!(point.xCoord >= this->firstPoint->xCoord && point.xCoord <= this->secondPoint->xCoord)) {
+        return false;
+    }
+    if (!(point.yCoord >= this->firstPoint->yCoord && point.yCoord <= this->secondPoint->yCoord)) {
+        return false;
+    }
+    if (!(point.zCoord >= this->firstPoint->zCoord && point.zCoord <= this->secondPoint->zCoord)) {
+        return false;
+    }
+    return true;
+}
+
 double Prism::volume() const {
     if (firstPoint == nullptr || secondPoint == nullptr) {
         cout << "nullptr is caught" << endl;

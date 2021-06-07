@@ -1,4 +1,5 @@
 #pragma once
+#include "../r-tree/prism.h"
 #include <iostream>
 #include <cmath>
 
@@ -52,14 +53,6 @@ struct Line {
     Point* p1;
     Point* p2;
     double triangle_intersection(const Triangle& triangle) const {
-/*
-        cout << "vert1: " << triangle.firstVertex->xCoord << " " << triangle.firstVertex->yCoord
-        << " " << triangle.firstVertex->zCoord << endl;
-        cout << "vert2: " << triangle.secondVertex->xCoord << " " << triangle.secondVertex->yCoord
-             << " " << triangle.secondVertex->zCoord << endl;
-        cout << "vert3: " << triangle.secondVertex->xCoord << " " << triangle.secondVertex->yCoord
-             << " " << triangle.secondVertex->zCoord << endl;
-*/
         Vector3 dir(p2->xCoord, p2->yCoord, p2->zCoord);
 
         Vector3 e1(*triangle.firstVertex, *triangle.secondVertex);
@@ -84,5 +77,20 @@ struct Line {
             return 0;
         }
         return Vector3::dot(e2, qvec) * inv_det;
+    }
+
+    Point locationWhenX(double x) {
+        double deltaX = p2->xCoord - p1->xCoord;
+        double deltaY = p2->yCoord - p1->yCoord;
+        double deltaZ = p2->zCoord - p1->zCoord;
+
+        double y_component = (x - p1->xCoord)*deltaY/deltaX + p1->yCoord;
+        double z_component = (x - p1->xCoord)*deltaZ/deltaX + p1->zCoord;
+        Point location{x, y_component, z_component};
+        return location;
+    }
+
+    bool doesIntersectParallelepiped(const Prism& prism) {
+
     }
 };
