@@ -9,10 +9,9 @@ void rTree::findObjectsUsingRay(Line curRay, Node *curNode, vector<Triangle *> &
         }
     } else {
         for (auto &node : curNode->nodes) {
-            //TODO:
-            //if(curRay.doesIntersect(node->MBP)){
-            //    findObjectsUsingRay(curRay, node, result);
-            //}
+            if (curRay.doesIntersectParallelepiped(node->MBP)) {
+                findObjectsUsingRay(curRay, node, result);
+            }
         }
     }
 }
@@ -27,10 +26,9 @@ std::vector<Triangle *> rTree::findObjectsUsingRay(Line curRay) {
         }
     } else {
         for (auto &node : root->nodes) {
-            //TODO:
-            //if(curRay.doesIntersect(node->MBP)){
-            //    findObjectsUsingRay(curRay, node, result);
-            //}
+            if (curRay.doesIntersectParallelepiped(node->MBP)) {
+                findObjectsUsingRay(curRay, node, result);
+            }
         }
     }
     return result;
