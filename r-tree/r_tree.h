@@ -5,6 +5,12 @@
 struct TriangleLeaf {
     Triangle *triangle;
     Prism MBP;
+    TriangleLeaf(Triangle *t){
+        MBP = Prism();
+        MBP = MBP.extend(*t->firstVertex);
+        MBP = MBP.extend(*t->secondVertex);
+        MBP = MBP.extend(*t->thirdVertex);
+    }
 };
 
 struct Node {
