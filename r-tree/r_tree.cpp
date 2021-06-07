@@ -47,7 +47,7 @@ void rTree::splitNotLeafNode(Node *curNode, Node *insertedNode) {
         root = nodeParent;
         root->parentNode = nullptr;
     }
-    //В случае если он им не является
+        //В случае если он им не является
     else {
         nodeParent = curNode->parentNode;
     }
@@ -72,7 +72,7 @@ void rTree::splitNotLeafNode(Node *curNode, Node *insertedNode) {
     double curVolume;
 
     //Сортировка нод
-    qsort(newNodes, maxCount + 1, sizeof(Node*), sortNodesByAxis);
+    qsort(newNodes, maxCount + 1, sizeof(Node *), sortNodesByAxis);
 
     //Выбор лучшего распределения
     for (int j = minCount - 1; j < maxCount - minCount; ++j) {
@@ -216,27 +216,25 @@ void rTree::splitLeafNode(Node *curNode, TriangleLeaf *curObj) {
 int rTree::sortObjectsByAxis(const void *a, const void *b) {
     const TriangleLeaf *arg1 = *(const TriangleLeaf **) a;
     const TriangleLeaf *arg2 = *(const TriangleLeaf **) b;
-    /*if(arg1->MBP == arg2->MBP){
+    if (arg1->MBP.getFirstPoint()->xCoord == arg2->MBP.getFirstPoint()->xCoord) {
         return 0;
-    }
-    else{
-        if(arg1->MBP < arg2->MBP){
+    } else {
+        if (arg1->MBP.getFirstPoint()->xCoord < arg2->MBP.getFirstPoint()->xCoord) {
             return -1;
         }
         return 1;
-    }*/
+    }
 }
 
 int rTree::sortNodesByAxis(const void *a, const void *b) {
     const Node *arg1 = *(const Node **) a;
     const Node *arg2 = *(const Node **) b;
-    /*if(arg1->MBP == arg2->MBP){
+    if (arg1->MBP.getFirstPoint()->xCoord == arg2->MBP.getFirstPoint()->xCoord) {
         return 0;
-    }
-    else{
-        if(arg1->MBP < arg2->MBP){
+    } else {
+        if (arg1->MBP.getFirstPoint()->xCoord < arg2->MBP.getFirstPoint()->xCoord) {
             return -1;
         }
         return 1;
-    }*/
+    }
 }

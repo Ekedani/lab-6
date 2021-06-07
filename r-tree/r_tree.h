@@ -2,26 +2,26 @@
 #include "prism.h"
 #include <cfloat>
 
-struct TriangleLeaf{
-    Triangle* triangle;
+struct TriangleLeaf {
+    Triangle *triangle;
     Prism MBP;
 };
 
-struct Node{
+struct Node {
     Node *parentNode;
     Prism MBP;
-    std::vector<TriangleLeaf*> objects;
-    std::vector<Node*> nodes;
+    std::vector<TriangleLeaf *> objects;
+    std::vector<Node *> nodes;
 
-    Node(){
+    Node() {
         parentNode = nullptr;
     }
 
-    bool isLeaf() const{
+    bool isLeaf() const {
         return nodes.empty();
     }
 
-    void updateMBP(){
+    void updateMBP() {
         //если есть обьекты
         //если есть дочерние ноды
     }
@@ -39,23 +39,22 @@ private:
 
 public:
 
-    rTree(){
+    rTree() {
         root = new Node;
         root->parentNode = nullptr;
         root->updateMBP();
     }
 
     //TODO: Переписать методы из старого R дерева
-    Node* chooseSubtree(Triangle newTriangle){
+    Node *chooseSubtree(Triangle newTriangle) {
         return chooseSubtree(root, newTriangle);
     }
 
-    Node* chooseSubtree(Node* start, Triangle newTriangle){
-        Node* chosen = nullptr;
-        if (start->isLeaf()){
+    Node *chooseSubtree(Node *start, Triangle newTriangle) {
+        Node *chosen = nullptr;
+        if (start->isLeaf()) {
             return start;
-        }
-        else {
+        } else {
             int index;
             //TODO: выбор по объему
             //Point point (new_place.longitude,new_place.latitude);
@@ -79,7 +78,7 @@ public:
         //return chooseSubtree(chosen, new_place);
     }
 
-    void insertTriangle(Triangle& curTriangle){
+    void insertTriangle(Triangle &curTriangle) {
         Node *chosenNode = chooseSubtree(root, curTriangle);
         Triangle *ptrToTriangle = &curTriangle;
 
@@ -99,16 +98,19 @@ public:
     }
 
     //Методы поиска (Нижний, желательно, перенести в приватные)
-    std::vector<Triangle*> findObjectsUsingRay(Line curRay);
-    static void findObjectsUsingRay(Line curRay, Node* curNode, std::vector<Triangle*> &result);
+    std::vector<Triangle *> findObjectsUsingRay(Line curRay);
+
+    static void findObjectsUsingRay(Line curRay, Node *curNode, std::vector<Triangle *> &result);
 
     //Разделение узлов, тоже надо перенести в приватные
     void splitLeafNode(Node *curNode, TriangleLeaf *curObj);
+
     void splitNotLeafNode(Node *curNode, Node *insertedNode);
 
     //Сортировки по оси OX
-    static int sortObjectsByAxis (const void *a, const void *b);
-    static int sortNodesByAxis (const void *a, const void *b);
+    static int sortObjectsByAxis(const void *a, const void *b);
+
+    static int sortNodesByAxis(const void *a, const void *b);
 
 
 };
