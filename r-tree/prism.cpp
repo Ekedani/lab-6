@@ -58,18 +58,42 @@ double Prism::overlapVolume(const Prism &prism) {
     return this->Intersection(prism).volume();
 }
 
+void Prism::reorder() {
+    if (this->firstPoint->xCoord > this->secondPoint->xCoord) {
+        double temp = this->firstPoint->xCoord;
+        this->firstPoint->xCoord = this->secondPoint->xCoord;
+        this->secondPoint->xCoord = temp;
+    }
+    if (this->firstPoint->yCoord > this->secondPoint->yCoord) {
+        double temp = this->firstPoint->yCoord;
+        this->firstPoint->yCoord = this->secondPoint->yCoord;
+        this->secondPoint->yCoord = temp;
+    }
+    if (this->firstPoint->zCoord > this->secondPoint->zCoord) {
+        double temp = this->firstPoint->zCoord;
+        this->firstPoint->zCoord = this->secondPoint->zCoord;
+        this->secondPoint->zCoord = temp;
+    }
+}
+
 Prism Prism::extend(const Point &point) {
-    if (this->firstPoint == nullptr) {
-        cout << "firstPoint nullptr is caught" << endl;
-        return Prism();
-    }
-
-    if (this->secondPoint == nullptr) {
-        cout << "secondPoint nullptr is caught" << endl;
-        return Prism();
-    }
-
     Prism extended;
+    if (this->firstPoint == nullptr || this->secondPoint == nullptr) {
+        if (this->firstPoint == nullptr) {
+            cout << "firstPoint nullptr is caught" << endl;
+            firstPoint = new Point;
+            *firstPoint = {point.xCoord, point.yCoord, point.zCoord};
+        }
+
+        if (this->secondPoint == nullptr) {
+            cout << "secondPoint nullptr is caught" << endl;
+            secondPoint = new Point;
+            *secondPoint = {point.xCoord, point.yCoord, point.zCoord};
+        }
+        this->reorder();
+        return extended;
+    }
+
     double firstX = min(this->firstPoint->xCoord, point.xCoord);
     double firstY = min(this->firstPoint->yCoord, point.yCoord);
     double firstZ = min(this->firstPoint->zCoord, point.zCoord);

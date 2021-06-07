@@ -22,6 +22,8 @@ public:
 
     double overlapVolume(const Prism &prism);
 
+    void reorder();
+
     Prism extend(const Point &point);
 
     double volumeIncreasing(const Point &point);

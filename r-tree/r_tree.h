@@ -22,8 +22,14 @@ struct Node {
     }
 
     void updateMBP() {
-        //если есть обьекты
-        //если есть дочерние ноды
+        for (int i = 0; i < objects.size(); ++i) {
+            MBP = MBP.extend(*objects[i]->MBP.getFirstPoint());
+            MBP = MBP.extend(*objects[i]->MBP.getSecondPoint());
+        }
+        for (int i = 0; i < nodes.size(); ++i) {
+            MBP = MBP.extend(*nodes[i]->MBP.getFirstPoint());
+            MBP = MBP.extend(*nodes[i]->MBP.getSecondPoint());
+        }
     }
 };
 
