@@ -1,5 +1,6 @@
 #pragma once
 #include <iostream>
+#include <cmath>
 
 using namespace std;
 
@@ -7,6 +8,12 @@ struct Point{
     double xCoord;
     double yCoord;
     double zCoord;
+    double distanceTo(const Point& other) {
+        double deltaX = (this->xCoord - other.xCoord);
+        double deltaY = (this->yCoord - other.yCoord);
+        double deltaZ = (this->zCoord - other.zCoord);
+        return sqrt(deltaX*deltaX + deltaY*deltaY + deltaZ*deltaZ);
+    }
 };
 
 struct Triangle {
@@ -44,15 +51,15 @@ public:
 struct Line {
     Point* p1;
     Point* p2;
-    double triangle_intersection(const Triangle& triangle) {
-        /* DEBUG
+    double triangle_intersection(const Triangle& triangle) const {
+/*
         cout << "vert1: " << triangle.firstVertex->xCoord << " " << triangle.firstVertex->yCoord
         << " " << triangle.firstVertex->zCoord << endl;
         cout << "vert2: " << triangle.secondVertex->xCoord << " " << triangle.secondVertex->yCoord
              << " " << triangle.secondVertex->zCoord << endl;
         cout << "vert3: " << triangle.secondVertex->xCoord << " " << triangle.secondVertex->yCoord
              << " " << triangle.secondVertex->zCoord << endl;
-        */
+*/
         Vector3 dir(p2->xCoord, p2->yCoord, p2->zCoord);
 
         Vector3 e1(*triangle.firstVertex, *triangle.secondVertex);

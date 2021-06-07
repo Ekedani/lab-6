@@ -5,22 +5,29 @@ using namespace std;
 
 int main() {
     //Пока что работает только с кратными 4 размерами, потом пофиксим
-    const int size = 16;
+    const int size = 256;
     vector<Triangle*> testVec;
-    //введи свой адрес
-    testVec = objFileReader::readTriangles("C:\\Users\\koziu\\Desktop\\Labs\\lab-6\\cube.obj");
+    testVec = objFileReader::readTriangles("C:\\Users\\koziu\\Desktop\\Labs\\lab-6\\cow.obj");
 
+/*
     cout << "testVec size: " << testVec.size() << endl;
-    cout << "testVec[0]: " << endl;
-    cout << "vert1: " << testVec[0]->firstVertex->xCoord << " " << testVec[0]->firstVertex->yCoord
-         << " " << testVec[0]->firstVertex->zCoord << endl;
-    cout << "vert2: " << testVec[0]->secondVertex->xCoord << " " << testVec[0]->secondVertex->yCoord
-         << " " << testVec[0]->secondVertex->zCoord << endl;
-    cout << "vert3: " << testVec[0]->secondVertex->xCoord << " " << testVec[0]->secondVertex->yCoord
-         << " " << testVec[0]->secondVertex->zCoord << endl;
-
+    cout << "testVec[i]: " << endl;
+    for (int i = 0; i < testVec.size(); ++i) {
+        cout << "vert1: " << testVec[i]->firstVertex->xCoord << " " << testVec[i]->firstVertex->yCoord
+             << " " << testVec[i]->firstVertex->zCoord << endl;
+        cout << "vert2: " << testVec[i]->secondVertex->xCoord << " " << testVec[i]->secondVertex->yCoord
+             << " " << testVec[i]->secondVertex->zCoord << endl;
+        cout << "vert3: " << testVec[i]->thirdVertex->xCoord << " " << testVec[i]->thirdVertex->yCoord
+             << " " << testVec[i]->thirdVertex->zCoord << endl;
+    }
+*/
     bitmapRender test(size, size);
-    Point Camera{0,0,-2};
+    Point CameraPos{0,0, -5};
+    Point CameraDir{0, 0, 1};
+    Point PlaneOrigin{CameraPos.xCoord + CameraDir.xCoord,
+                      CameraPos.yCoord+CameraDir.yCoord,
+                      CameraPos.zCoord+CameraDir.zCoord};
+    double fov = 60;
 
     for (int i = 0; i < size; ++i) {
         for (int j = 0; j < size; ++j) {
@@ -30,9 +37,16 @@ int main() {
             test[i][j].blueComponent = 255;
 
             double xCoord = (i - size/2)/(double)size;
-            double yCoord = (j - size/2)/(double)size;
-            double zCoord = -2;
-            Point current{xCoord, yCoord, zCoord};
+            double yCoord = -(j - size/2)/(double)size;
+
+            double distanceToPlaneFromCamera = CameraPos.distanceTo(PlaneOrigin);
+            double fovInRad = (fov/180)*3.14159265;
+            double realPlaneHeight = distanceToPlaneFromCamera * tan(fovInRad);
+            Point positionOnPlane{
+                PlaneOrigin.xCoord + xCoord*realPlaneHeight/2,
+                PlaneOrigin.yCoord + yCoord*realPlaneHeight/2,
+                PlaneOrigin.zCoord+0
+            };
 
             /* DEBUG
             cout << "xCurrent: " << current.xCoord << endl;
@@ -40,11 +54,11 @@ int main() {
             cout << "zCurrent: " << current.zCoord << endl;
             */
             Line ray;
-            ray.p1 = &current;
-            ray.p2 = &Camera;
+            ray.p1 = &positionOnPlane;
+            ray.p2 = &CameraPos;
             for (int k = 0; k < testVec.size(); ++k) {
                 if (ray.triangle_intersection(*testVec[k]) != 0) {
-                    cout << "V" << endl;
+                    //cout << "V" << endl;
                     test[i][j].redComponent =  100;
                     test[i][j].greenComponent = 100;
                     test[i][j].blueComponent = 100;
@@ -53,6 +67,8 @@ int main() {
             }
         }
     }
+
+
     test.writeToFile("lol.bmp");
 
 }
