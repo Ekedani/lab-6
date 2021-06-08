@@ -111,6 +111,9 @@ void rTree::splitNotLeafNode(Node *curNode, Node *insertedNode) {
 
     minimalFirstNode->parentNode = curNode->parentNode;
     minimalSecondNode->parentNode = curNode->parentNode;
+    for(auto node : minimalSecondNode->nodes){
+        node->parentNode = minimalSecondNode;
+    }
 
     *curNode = *minimalFirstNode;
     delete minimalFirstNode;
@@ -280,9 +283,9 @@ void rTree::insertTriangle(Triangle *curTriangle) {
     } else {
         splitLeafNode(chosenNode, newObj);
     }
-    numOfInserted++;
-    debugTreeParse();
-    cout << "Inserted triangles: " << numOfInserted << '\n';
+    //numOfInserted++;
+    //debugTreeParse();
+    //cout << "Inserted triangles: " << numOfInserted << '\n';
 }
 
 Node *rTree::chooseSubtree(const TriangleLeaf &newTriangle) {

@@ -21,6 +21,21 @@ struct Node {
     std::vector<TriangleLeaf *> objects;
     std::vector<Node *> nodes;
 
+    bool isInsideParentNode(){
+        bool result = false;
+        if(this->parentNode == nullptr){
+            return true;
+        }
+        else{
+            for (auto node: this->parentNode->nodes) {
+                if(node == this){
+                    return true;
+                }
+            }
+        }
+        return result;
+    }
+
 
 
     Node();
