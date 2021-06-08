@@ -9,7 +9,7 @@ void rTree::findObjectsUsingRay(Line curRay, Node *curNode, vector<Triangle *> &
         }
     } else {
         for (auto &node : curNode->nodes) {
-            if (curRay.doesIntersectParallelepiped(node->MBP)) {
+            if (curRay.doesIntersectParallelepiped(*node->MBP)) {
                 findObjectsUsingRay(curRay, node, result);
             }
         }
@@ -26,7 +26,7 @@ std::vector<Triangle *> rTree::findObjectsUsingRay(Line curRay) {
         }
     } else {
         for (auto &node : root->nodes) {
-            if (curRay.doesIntersectParallelepiped(node->MBP)) {
+            if (curRay.doesIntersectParallelepiped(*node->MBP)) {
                 //cout << "Intersection with parallelepiped accured" << endl;
                 findObjectsUsingRay(curRay, node, result);
             }
@@ -89,7 +89,7 @@ void rTree::splitNotLeafNode(Node *curNode, Node *insertedNode) {
         firstNode->updateMBP();
         secondNode->updateMBP();
 
-        curOverlap = firstNode->MBP.overlapVolume(secondNode->MBP);
+        curOverlap = firstNode->MBP->overlapVolume(*secondNode->MBP);
 
         if (curOverlap < minimalOverlap) {
             *minimalFirstNode = *firstNode;
@@ -97,7 +97,7 @@ void rTree::splitNotLeafNode(Node *curNode, Node *insertedNode) {
             minimalOverlap = curOverlap;
         } else {
             if (curOverlap == minimalOverlap) {
-                curVolume = firstNode->MBP.volume() + secondNode->MBP.volume() - curOverlap;
+                curVolume = firstNode->MBP->volume() + secondNode->MBP->volume() - curOverlap;
                 if (curVolume < minimalVolume) {
                     *minimalFirstNode = *firstNode;
                     *minimalSecondNode = *secondNode;
@@ -174,7 +174,7 @@ void rTree::splitLeafNode(Node *curNode, TriangleLeaf *curObj) {
         firstNode->updateMBP();
         secondNode->updateMBP();
 
-        curOverlap = firstNode->MBP.overlapVolume(secondNode->MBP);
+        curOverlap = firstNode->MBP->overlapVolume(*secondNode->MBP);
 
         if (curOverlap < minimalOverlap) {
             *minimalFirstNode = *firstNode;
@@ -182,7 +182,7 @@ void rTree::splitLeafNode(Node *curNode, TriangleLeaf *curObj) {
             minimalVolume = curVolume;
         } else {
             if (curOverlap == minimalOverlap) {
-                curVolume = firstNode->MBP.volume() + secondNode->MBP.volume() - curOverlap;
+                curVolume = firstNode->MBP->volume() + secondNode->MBP->volume() - curOverlap;
                 if (curVolume < minimalVolume) {
                     *minimalFirstNode = *firstNode;
                     *minimalSecondNode = *secondNode;
@@ -227,10 +227,10 @@ int rTree::sortObjectsByAxis(const void *a, const void *b) {
 int rTree::sortNodesByAxis(const void *a, const void *b) {
     const Node *arg1 = *(const Node **) a;
     const Node *arg2 = *(const Node **) b;
-    if (arg1->MBP.getFirstPoint()->xCoord == arg2->MBP.getFirstPoint()->xCoord) {
+    if (arg1->MBP->getFirstPoint()->xCoord == arg2->MBP->getFirstPoint()->xCoord) {
         return 0;
     } else {
-        if (arg1->MBP.getFirstPoint()->xCoord < arg2->MBP.getFirstPoint()->xCoord) {
+        if (arg1->MBP->getFirstPoint()->xCoord < arg2->MBP->getFirstPoint()->xCoord) {
             return -1;
         }
         return 1;
@@ -245,15 +245,15 @@ Node *rTree::chooseSubtree(Node *start, const TriangleLeaf &newTriangle) {
         int index;
         auto minimalMBPIncreasingVolume = DBL_MAX;
         for (auto &node : start->nodes) {
-            if (node->MBP.volumeIncreasing(newTriangle.MBP) < minimalMBPIncreasingVolume) {
-                minimalMBPIncreasingVolume = node->MBP.volumeIncreasing(newTriangle.MBP);
+            if (node->MBP->volumeIncreasing(newTriangle.MBP) < minimalMBPIncreasingVolume) {
+                minimalMBPIncreasingVolume = node->MBP->volumeIncreasing(newTriangle.MBP);
             }
         }
         auto minimalVolume = DBL_MAX;
         for (int i = 0; i < start->nodes.size(); ++i) {
-            if (start->nodes[i]->MBP.volumeIncreasing(newTriangle.MBP) == minimalMBPIncreasingVolume) {
-                if (start->nodes[i]->MBP.volume() < minimalVolume) {
-                    minimalVolume = start->nodes[i]->MBP.volume();
+            if (start->nodes[i]->MBP->volumeIncreasing(newTriangle.MBP) == minimalMBPIncreasingVolume) {
+                if (start->nodes[i]->MBP->volume() < minimalVolume) {
+                    minimalVolume = start->nodes[i]->MBP->volume();
                     index = i;
                 }
             }
@@ -296,17 +296,18 @@ rTree::rTree() {
 }
 
 void Node::updateMBP() {
-    MBP = Prism();
+    this->MBP = new Prism();
+    *MBP = Prism();
     for (auto &object : objects) {
-        object->printMBR();
-        MBP = MBP.extend(*object->MBP.getFirstPoint());
-        MBP = MBP.extend(*object->MBP.getSecondPoint());
+        *MBP = MBP->extend(*object->MBP.getFirstPoint());
+        *MBP = MBP->extend(*object->MBP.getSecondPoint());
+        MBP->toConsole();
     }
+    MBP->toConsole();
     for (auto &node : nodes) {
-        MBP = MBP.extend(*node->MBP.getFirstPoint());
-        MBP = MBP.extend(*node->MBP.getSecondPoint());
+        *MBP = MBP->extend(*node->MBP->getFirstPoint());
+        *MBP = MBP->extend(*node->MBP->getSecondPoint());
     }
-
 }
 
 bool Node::isLeaf() const {
@@ -315,6 +316,7 @@ bool Node::isLeaf() const {
 
 Node::Node() {
     parentNode = nullptr;
+    MBP = nullptr;
 }
 
 TriangleLeaf::TriangleLeaf(Triangle *t) {

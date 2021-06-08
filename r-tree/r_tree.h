@@ -17,7 +17,7 @@ struct TriangleLeaf {
 
 struct Node {
     Node *parentNode;
-    Prism MBP;
+    Prism *MBP;
     std::vector<TriangleLeaf *> objects;
     std::vector<Node *> nodes;
 
