@@ -41,6 +41,9 @@ public:
         double z = v1.xCoord*v2.yCoord - v1.yCoord*v2.xCoord;
         return Vector3(x,y,z);
     }
+    double Length() {
+        return sqrt(xCoord*xCoord + yCoord*yCoord + zCoord*zCoord);
+    }
 };
 
 struct Line {
@@ -70,32 +73,14 @@ struct Line {
         if (v < 0 || u + v > 1) {
             return 0;
         }
-        return Vector3::dot(e2, qvec) * inv_det;
+
+        return u; //returns x-coordinate (Cartesian)
     }
 
     Point intersectionWithTriangle(const Triangle& triangle){
-        double distance = this->triangle_intersection(triangle);
-        double deltaX = p2->xCoord - p1->xCoord;
-        double deltaY = p2->yCoord - p1->yCoord;
-        double deltaZ = p2->zCoord - p1->zCoord;
+        double x = this->triangle_intersection(triangle);
 
-        double x1 = distance/sqrt(1+(deltaY*deltaY + deltaZ*deltaZ)/(deltaX*deltaX)) + p1->xCoord;
-        double x2 = -distance/sqrt(1+(deltaY*deltaY + deltaZ*deltaZ)/(deltaX*deltaX)) + p1->xCoord;
-        double final_X;
-        if (p2->xCoord >= p1->xCoord) {
-            if (x1 >= p1->xCoord) {
-                final_X = x1;
-            } else {
-                final_X = x2;
-            }
-        } else {
-            if (x1 <= p1->xCoord) {
-                final_X = x1;
-            } else {
-                final_X = x2;
-            }
-        }
-        return this->locationWhenX(final_X);
+        return this->locationWhenX(x);
     }
 
     Point locationWhenX(double x) {
