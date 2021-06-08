@@ -9,11 +9,19 @@ int main() {
     //Пока что работает только с кратными 4 размерами, потом пофиксим
     const int size = 256;
     vector<Triangle*> testVec;
-    testVec = objFileReader::readTriangles("G:\\my-repos\\lab-6\\cow.obj");
+    testVec = objFileReader::readTriangles("C:\\Users\\koziu\\Desktop\\Labs\\lab-6\\cow.obj");
+    /*
+    for (int i = 0; i < testVec.size(); ++i) {
+        TriangleLeaf t (testVec[i]);
+        t.print();
+        t.printMBR();
+    }
+     */
 
     rTree testTree;
 
     cout <<testVec.size() << '\n';
+
     for (int i = 0; i < testVec.size(); ++i) {
         testTree.insertTriangle(testVec[i]);
     }
@@ -50,7 +58,8 @@ int main() {
             ray.p1 = &positionOnPlane;
             ray.p2 = &CameraPos;
 
-            /*for (int k = 0; k < testVec.size(); ++k) {
+/*
+            for (int k = 0; k < testVec.size(); ++k) {
                 if (ray.triangle_intersection(*testVec[k]) != 0) {
                     //cout << "V" << endl;
                     test[i][j].redComponent =  100;
@@ -58,7 +67,8 @@ int main() {
                     test[i][j].blueComponent = 100;
                     break;
                 }
-            }*/
+            }
+             */
 
 
             if (!testTree.findObjectsUsingRay(ray).empty()) {
@@ -70,4 +80,5 @@ int main() {
     }
 
     test.writeToFile("lol.bmp");
+
 }

@@ -124,6 +124,7 @@ void rTree::splitNotLeafNode(Node *curNode, Node *insertedNode) {
     } else {
         splitNotLeafNode(curNode->parentNode, minimalSecondNode);
     }
+
 }
 
 void rTree::splitLeafNode(Node *curNode, TriangleLeaf *curObj) {
@@ -301,9 +302,8 @@ void Node::updateMBP() {
     for (auto &object : objects) {
         *MBP = MBP->extend(*object->MBP.getFirstPoint());
         *MBP = MBP->extend(*object->MBP.getSecondPoint());
-        MBP->toConsole();
     }
-    //MBP->toConsole();
+
     for (auto &node : nodes) {
         *MBP = MBP->extend(*node->MBP->getFirstPoint());
         *MBP = MBP->extend(*node->MBP->getSecondPoint());

@@ -42,13 +42,13 @@ Prism &Prism::operator=(const Prism &prism) {
 }
 
 bool Prism::isInside(const Point &point) const {
-    if (!(point.xCoord >= this->firstPoint->xCoord && point.xCoord <= this->secondPoint->xCoord)) {
+    if (!(point.xCoord >= (this->firstPoint->xCoord) && point.xCoord <= (this->secondPoint->xCoord))) {
         return false;
     }
-    if (!(point.yCoord >= this->firstPoint->yCoord && point.yCoord <= this->secondPoint->yCoord)) {
+    if (!(point.yCoord >= (this->firstPoint->yCoord) && point.yCoord <= (this->secondPoint->yCoord))) {
         return false;
     }
-    if (!(point.zCoord >= this->firstPoint->zCoord && point.zCoord <= this->secondPoint->zCoord)) {
+    if (!(point.zCoord >= (this->firstPoint->zCoord) && point.zCoord <= (this->secondPoint->zCoord))) {
         return false;
     }
     return true;

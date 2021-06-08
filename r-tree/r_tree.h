@@ -61,25 +61,41 @@ private:
 
 public:
     void debugTreeParse(){
+        bool correct = true;
         int counter = 0;
         if(root->isLeaf()){
+            for(auto obj : root->objects){
+                correct = correct & root->MBP->isInside(*obj->triangle->firstVertex);
+                correct = correct & root->MBP->isInside(*obj->triangle->secondVertex);
+                correct = correct & root->MBP->isInside(*obj->triangle->thirdVertex);
+            }
             counter += root->objects.size();
         }
         else{
             for (auto node : root->nodes) {
-                recursiveTreeParse(counter, node);
+                correct = correct & root->MBP->isInside(*node->MBP->getFirstPoint());
+                correct = correct & root->MBP->isInside(*node->MBP->getSecondPoint());
+                recursiveTreeParse(counter, node, correct);
             }
         }
         cout << "Total num of objects: " << counter << '\n';
+        cout << "correct: " << correct << endl;
     }
 
-    void recursiveTreeParse(int &count, Node* curNode){
+    void recursiveTreeParse(int &count, Node* curNode, bool &correct){
         if(curNode->isLeaf()){
+            for(auto obj : curNode->objects){
+                correct = correct & curNode->MBP->isInside(*obj->triangle->firstVertex);
+                correct = correct & curNode->MBP->isInside(*obj->triangle->secondVertex);
+                correct = correct & curNode->MBP->isInside(*obj->triangle->thirdVertex);
+            }
             count += curNode->objects.size();
         }
         else{
             for (auto node : curNode->nodes) {
-                recursiveTreeParse(count, node);
+                correct = correct & curNode->MBP->isInside(*node->MBP->getFirstPoint());
+                correct = correct & curNode->MBP->isInside(*node->MBP->getSecondPoint());
+                recursiveTreeParse(count, node, correct);
             }
         }
     }
