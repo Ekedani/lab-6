@@ -27,6 +27,7 @@ std::vector<Triangle *> rTree::findObjectsUsingRay(Line curRay) {
     } else {
         for (auto &node : root->nodes) {
             if (curRay.doesIntersectParallelepiped(node->MBP)) {
+                //cout << "Intersection with parallelepiped accured" << endl;
                 findObjectsUsingRay(curRay, node, result);
             }
         }
@@ -295,7 +296,9 @@ rTree::rTree() {
 }
 
 void Node::updateMBP() {
+    MBP = Prism();
     for (auto &object : objects) {
+        object->printMBR();
         MBP = MBP.extend(*object->MBP.getFirstPoint());
         MBP = MBP.extend(*object->MBP.getSecondPoint());
     }
@@ -303,6 +306,7 @@ void Node::updateMBP() {
         MBP = MBP.extend(*node->MBP.getFirstPoint());
         MBP = MBP.extend(*node->MBP.getSecondPoint());
     }
+
 }
 
 bool Node::isLeaf() const {

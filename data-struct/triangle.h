@@ -10,6 +10,11 @@ struct Triangle {
     Point* firstVertex;
     Point* secondVertex;
     Point* thirdVertex;
+    void print() {
+        firstVertex->print();
+        secondVertex->print();
+        thirdVertex->print();
+    }
 };
 
 class Vector3 {

@@ -6,8 +6,13 @@ struct TriangleLeaf {
     Triangle *triangle;
     Prism MBP;
 
-
     explicit TriangleLeaf(Triangle *t);
+    void print(){
+        triangle->print();
+    }
+    void printMBR(){
+        MBP.toConsole();
+    }
 };
 
 struct Node {
