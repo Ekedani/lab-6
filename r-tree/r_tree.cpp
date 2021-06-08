@@ -303,7 +303,7 @@ void Node::updateMBP() {
         *MBP = MBP->extend(*object->MBP.getSecondPoint());
         MBP->toConsole();
     }
-    MBP->toConsole();
+    //MBP->toConsole();
     for (auto &node : nodes) {
         *MBP = MBP->extend(*node->MBP->getFirstPoint());
         *MBP = MBP->extend(*node->MBP->getSecondPoint());
