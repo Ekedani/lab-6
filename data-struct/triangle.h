@@ -73,12 +73,19 @@ struct Line {
         if (v < 0 || u + v > 1) {
             return 0;
         }
-
-        return u; //returns x-coordinate (Cartesian)
+        return Vector3::dot(e2, qvec) * inv_det;
     }
 
     Point intersectionWithTriangle(const Triangle& triangle){
-        double x = this->triangle_intersection(triangle);
+        Vector3 dir(p2->xCoord, p2->yCoord, p2->zCoord);
+        Vector3 e1(*triangle.firstVertex, *triangle.secondVertex);
+        Vector3 e2(*triangle.firstVertex, *triangle.thirdVertex);
+        Vector3 pvec = Vector3::cross(dir, e2);
+        double det = Vector3::dot(e1, pvec);
+        double inv_det = 1 / det;
+        Vector3 tvec(*triangle.firstVertex, *p1);
+        double u = Vector3::dot(tvec, pvec) * inv_det;
+        double x = u;
 
         return this->locationWhenX(x);
     }
