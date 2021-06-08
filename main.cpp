@@ -18,28 +18,25 @@ int main() {
     }
      */
 
-    Point p1{2, 0, 0};
-    Point p2{-2, 0, 0};
-    Point p3{0, -1, -1};
 
-    Point p4{0, 2, 0};
-    Point p5{0, 0, -1};
-
+    ////ТРЕУГОЛЬНИК
+    Point p1{-0.428017, 0.056587, -0.093474};
+    Point p2{-0.440513, 0.048295, -0.065657};
+    Point p3{-0.43362, 0.069116 , -0.048645};
+    ////ЛУЧ
+    Point p4{-0.433013, 0.0676582, 4};
+    Point p5{0, 0, -5};
     Triangle *testTriangle = new Triangle{&p1, &p2, &p3};
     Line newline{&p4, &p5};
+
     rTree testTree;
-
     TriangleLeaf testLeaf(testTriangle);
-
-
-
     cout << testVec.size() << '\n';
 
     for (int i = 0; i < testVec.size(); ++i) {
         testTree.insertTriangle(testVec[i]);
     }
     testTree.insertTriangle(testTriangle);
-    testTree.debugTreeParse();
     bitmapRender test(size, size);
 
     vector <Triangle *> Fine = testTree.findObjectsUsingRay(newline);
@@ -47,6 +44,7 @@ int main() {
     cout << newline.doesIntersectParallelepiped(testLeaf.MBP) << '\n';
     cout << Fine.size() << '\n';
 
+    testTree.debugTreeParse(testTriangle, &newline);
 
     Point CameraPos{0,0, -5};
     Point CameraDir{0, 0, 1};

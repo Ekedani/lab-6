@@ -3,7 +3,6 @@
 void rTree::findObjectsUsingRay(Line curRay, Node *curNode, vector<Triangle *> &result) {
     if (curNode->isLeaf()) {
         for (auto &object : curNode->objects) {
-            object->print();
             if (curRay.triangle_intersection(*object->triangle) != 0) {
                 result.push_back(object->triangle);
             }

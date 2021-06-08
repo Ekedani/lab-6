@@ -73,11 +73,16 @@ private:
     Node *chooseSubtree(Node *start, const TriangleLeaf &newTriangle);
 
 public:
-    void debugTreeParse(){
+    void debugTreeParse(Triangle *object, Line *ray){
         bool correct = true;
         int counter = 0;
         if(root->isLeaf()){
             for(auto obj : root->objects){
+                if(object->firstVertex == obj->triangle->firstVertex &&
+                   object->secondVertex == obj->triangle->secondVertex &&
+                   object->thirdVertex == obj->triangle->thirdVertex){
+                    root->MBP->toConsole();
+                }
                 correct = correct & root->MBP->isInside(*obj->triangle->firstVertex);
                 correct = correct & root->MBP->isInside(*obj->triangle->secondVertex);
                 correct = correct & root->MBP->isInside(*obj->triangle->thirdVertex);
@@ -88,16 +93,22 @@ public:
             for (auto node : root->nodes) {
                 correct = correct & root->MBP->isInside(*node->MBP->getFirstPoint());
                 correct = correct & root->MBP->isInside(*node->MBP->getSecondPoint());
-                recursiveTreeParse(counter, node, correct);
+                recursiveTreeParse(counter, node, correct, object, ray);
             }
         }
         cout << "Total num of objects: " << counter << '\n';
         cout << "correct: " << correct << endl;
     }
 
-    void recursiveTreeParse(int &count, Node* curNode, bool &correct){
+    void recursiveTreeParse(int &count, Node* curNode, bool &correct, Triangle *object, Line *ray){
         if(curNode->isLeaf()){
             for(auto obj : curNode->objects){
+                if(object->firstVertex == obj->triangle->firstVertex &&
+                   object->secondVertex == obj->triangle->secondVertex &&
+                   object->thirdVertex == obj->triangle->thirdVertex){
+                    curNode->MBP->toConsole();
+                    cout << "Line and node intersection: " << ray->doesIntersectParallelepiped(obj->MBP) << '\n';
+                }
                 correct = correct & curNode->MBP->isInside(*obj->triangle->firstVertex);
                 correct = correct & curNode->MBP->isInside(*obj->triangle->secondVertex);
                 correct = correct & curNode->MBP->isInside(*obj->triangle->thirdVertex);
@@ -109,7 +120,7 @@ public:
                 correct = correct & curNode->MBP->isInside(*node->MBP->getFirstPoint());
                 correct = correct & curNode->MBP->isInside(*node->MBP->getSecondPoint());
                 correct = correct & curNode->isInsideParentNode();
-                recursiveTreeParse(count, node, correct);
+                recursiveTreeParse(count, node, correct, object, ray);
             }
         }
     }
