@@ -3,6 +3,7 @@
 void rTree::findObjectsUsingRay(Line curRay, Node *curNode, vector<Triangle *> &result) {
     if (curNode->isLeaf()) {
         for (auto &object : curNode->objects) {
+            object->print();
             if (curRay.triangle_intersection(*object->triangle) != 0) {
                 result.push_back(object->triangle);
             }
@@ -27,7 +28,6 @@ std::vector<Triangle *> rTree::findObjectsUsingRay(Line curRay) {
     } else {
         for (auto &node : root->nodes) {
             if (curRay.doesIntersectParallelepiped(*node->MBP)) {
-                //cout << "Intersection with parallelepiped accured" << endl;
                 findObjectsUsingRay(curRay, node, result);
             }
         }
@@ -184,6 +184,7 @@ void rTree::splitLeafNode(Node *curNode, TriangleLeaf *curObj) {
             *minimalFirstNode = *firstNode;
             *minimalSecondNode = *secondNode;
             minimalVolume = curVolume;
+
         } else {
             if (curOverlap == minimalOverlap) {
                 curVolume = firstNode->MBP->volume() + secondNode->MBP->volume() - curOverlap;
@@ -271,8 +272,6 @@ void rTree::insertTriangle(Triangle *curTriangle) {
     auto *newObj = new TriangleLeaf(curTriangle);
     Node *chosenNode = chooseSubtree(root, *newObj);
 
-
-
     //Если узел не переполнен
     if (chosenNode->objects.size() < maxCount) {
         chosenNode->objects.push_back(newObj);
@@ -283,9 +282,6 @@ void rTree::insertTriangle(Triangle *curTriangle) {
     } else {
         splitLeafNode(chosenNode, newObj);
     }
-    //numOfInserted++;
-    //debugTreeParse();
-    //cout << "Inserted triangles: " << numOfInserted << '\n';
 }
 
 Node *rTree::chooseSubtree(const TriangleLeaf &newTriangle) {

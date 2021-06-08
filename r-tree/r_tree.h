@@ -36,8 +36,6 @@ struct Node {
         return result;
     }
 
-
-
     Node();
 
     bool isLeaf() const;
@@ -110,6 +108,7 @@ public:
             for (auto node : curNode->nodes) {
                 correct = correct & curNode->MBP->isInside(*node->MBP->getFirstPoint());
                 correct = correct & curNode->MBP->isInside(*node->MBP->getSecondPoint());
+                correct = correct & curNode->isInsideParentNode();
                 recursiveTreeParse(count, node, correct);
             }
         }
@@ -123,8 +122,6 @@ public:
 
     //Метод поиска по лучу
     std::vector<Triangle *> findObjectsUsingRay(Line curRay);
-
-
 };
 
 

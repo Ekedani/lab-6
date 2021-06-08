@@ -153,10 +153,7 @@ struct Line {
         if (prism.isInside(this->locationWhenZ(z_1))) {
             return true;
         }
-        if (prism.isInside(this->locationWhenZ(z_2))) {
-            return true;
-        }
+        return prism.isInside(this->locationWhenZ(z_2));
 
-        return false;
     }
 };
