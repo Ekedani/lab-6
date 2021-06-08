@@ -106,13 +106,11 @@ Prism Prism::extend(const Point &point) {
     Prism extended;
     if (this->firstPoint == nullptr || this->secondPoint == nullptr) {
         if (this->firstPoint == nullptr) {
-            cout << "firstPoint nullptr is caught" << endl;
             extended.firstPoint = new Point;
             *extended.firstPoint = Point{point.xCoord, point.yCoord, point.zCoord};
         }
 
         if (this->secondPoint == nullptr) {
-            cout << "secondPoint nullptr is caught" << endl;
             extended.secondPoint = new Point;
             *extended.secondPoint = Point{point.xCoord, point.yCoord, point.zCoord};
         }

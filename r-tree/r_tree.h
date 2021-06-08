@@ -6,6 +6,7 @@ struct TriangleLeaf {
     Triangle *triangle;
     Prism MBP;
 
+
     explicit TriangleLeaf(Triangle *t);
 };
 
@@ -14,6 +15,8 @@ struct Node {
     Prism MBP;
     std::vector<TriangleLeaf *> objects;
     std::vector<Node *> nodes;
+
+
 
     Node();
 
@@ -27,6 +30,7 @@ class rTree {
 private:
     //Корень дерева
     Node *root;
+    int numOfInserted;
 
     //Минимальное и максимальное количество элементов в узле
     const static int minCount = 6;
@@ -51,6 +55,30 @@ private:
     Node *chooseSubtree(Node *start, const TriangleLeaf &newTriangle);
 
 public:
+    void debugTreeParse(){
+        int counter = 0;
+        if(root->isLeaf()){
+            counter += root->objects.size();
+        }
+        else{
+            for (auto node : root->nodes) {
+                recursiveTreeParse(counter, node);
+            }
+        }
+        cout << "Total num of objects: " << counter << '\n';
+    }
+
+    void recursiveTreeParse(int &count, Node* curNode){
+        if(curNode->isLeaf()){
+            count += curNode->objects.size();
+        }
+        else{
+            for (auto node : curNode->nodes) {
+                recursiveTreeParse(count, node);
+            }
+        }
+    }
+
     //Конструктор
     rTree();
 

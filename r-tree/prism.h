@@ -1,5 +1,6 @@
 #pragma once
 #include "../data-struct/Point.h"
+#include <iostream>
 
 class Prism {
 private:
@@ -9,6 +10,11 @@ private:
 
 public:
     Prism();
+
+    void toConsole(){
+        std::cout << "First point: " << firstPoint->xCoord << " " << firstPoint->yCoord << " " <<firstPoint->zCoord << '\n';
+        std::cout << "Second point: " << secondPoint->xCoord << " " << secondPoint->yCoord << " " << secondPoint->zCoord << '\n';
+    }
 
     Prism(Point *p1, Point *p2);
 

@@ -35,7 +35,6 @@ std::vector<Triangle *> rTree::findObjectsUsingRay(Line curRay) {
 }
 
 void rTree::splitNotLeafNode(Node *curNode, Node *insertedNode) {
-
     Node *nodeParent;
     //В случае если является корнем дерева
     if (curNode == root) {
@@ -82,7 +81,7 @@ void rTree::splitNotLeafNode(Node *curNode, Node *insertedNode) {
             firstNode->nodes.push_back(newNodes[curNode]);
         }
 
-        for (curNode = j; curNode < maxCount - 1; curNode++) {
+        for (curNode = j + 1; curNode <= maxCount; curNode++) {
             secondNode->nodes.push_back(newNodes[curNode]);
         }
 
@@ -167,7 +166,7 @@ void rTree::splitLeafNode(Node *curNode, TriangleLeaf *curObj) {
         for (curPlace; curPlace <= j; curPlace++) {
             firstNode->objects.push_back(newObjects[curPlace]);
         }
-        for (curPlace; curPlace <= maxCount; curPlace++) {
+        for (curPlace = j + 1; curPlace <= maxCount; curPlace++) {
             secondNode->objects.push_back(newObjects[curPlace]);
         }
 
@@ -268,6 +267,7 @@ void rTree::insertTriangle(Triangle *curTriangle) {
     Node *chosenNode = chooseSubtree(root, *newObj);
 
 
+
     //Если узел не переполнен
     if (chosenNode->objects.size() < maxCount) {
         chosenNode->objects.push_back(newObj);
@@ -278,6 +278,9 @@ void rTree::insertTriangle(Triangle *curTriangle) {
     } else {
         splitLeafNode(chosenNode, newObj);
     }
+    numOfInserted++;
+    debugTreeParse();
+    cout << "Inserted triangles: " << numOfInserted << '\n';
 }
 
 Node *rTree::chooseSubtree(const TriangleLeaf &newTriangle) {
@@ -288,6 +291,7 @@ rTree::rTree() {
     root = new Node;
     root->parentNode = nullptr;
     root->updateMBP();
+    numOfInserted = 0;
 }
 
 void Node::updateMBP() {
