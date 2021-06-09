@@ -24,25 +24,31 @@ int main() {
     Point p2{-0.440513, 0.048295, -0.065657};
     Point p3{-0.43362, 0.069116 , -0.048645};
     ////ЛУЧ
-    Point p4{-0.433013, 0.0676582, 4};
+    Point p4{-0.433013, 0.0676582, -4};
     Point p5{0, 0, -5};
     Triangle *testTriangle = new Triangle{&p1, &p2, &p3};
     Line newline{&p4, &p5};
+
 
     rTree testTree;
     TriangleLeaf testLeaf(testTriangle);
     cout << testVec.size() << '\n';
 
-    for (int i = 0; i < testVec.size(); ++i) {
-        testTree.insertTriangle(testVec[i]);
+    for (auto & i : testVec) {
+        testTree.insertTriangle(i);
     }
-    testTree.insertTriangle(testTriangle);
+
     bitmapRender test(size, size);
 
     vector <Triangle *> Fine = testTree.findObjectsUsingRay(newline);
     cout << newline.triangle_intersection(*testTriangle) << '\n';
     cout << newline.doesIntersectParallelepiped(testLeaf.MBP) << '\n';
     cout << Fine.size() << '\n';
+
+    cout << "Ray: " << '\n';
+    newline.p1->print();
+    newline.p2->print();
+    cout << "Triangle: " << '\n';
 
     testTree.debugTreeParse(testTriangle, &newline);
 

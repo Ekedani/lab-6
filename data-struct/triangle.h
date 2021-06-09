@@ -15,6 +15,20 @@ struct Triangle {
         secondVertex->print();
         thirdVertex->print();
     }
+
+    bool operator==(const Triangle& toComp) const{
+        bool result = true;
+        result = result & (this->firstVertex->xCoord == toComp.firstVertex->xCoord);
+        result = result & (this->firstVertex->yCoord == toComp.firstVertex->yCoord);
+        result = result & (this->firstVertex->zCoord == toComp.firstVertex->zCoord);
+        result = result & (this->secondVertex->xCoord == toComp.secondVertex->xCoord);
+        result = result & (this->secondVertex->yCoord == toComp.secondVertex->yCoord);
+        result = result & (this->secondVertex->zCoord == toComp.secondVertex->zCoord);
+        result = result & (this->thirdVertex->xCoord == toComp.thirdVertex->xCoord);
+        result = result & (this->thirdVertex->yCoord == toComp.thirdVertex->yCoord);
+        result = result & (this->thirdVertex->zCoord == toComp.thirdVertex->zCoord);
+        return result;
+    }
 };
 
 class Vector3 {

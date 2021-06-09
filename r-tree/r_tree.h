@@ -78,9 +78,7 @@ public:
         int counter = 0;
         if(root->isLeaf()){
             for(auto obj : root->objects){
-                if(object->firstVertex == obj->triangle->firstVertex &&
-                   object->secondVertex == obj->triangle->secondVertex &&
-                   object->thirdVertex == obj->triangle->thirdVertex){
+                if(*obj->triangle == *object){
                     root->MBP->toConsole();
                 }
                 correct = correct & root->MBP->isInside(*obj->triangle->firstVertex);
@@ -103,10 +101,23 @@ public:
     void recursiveTreeParse(int &count, Node* curNode, bool &correct, Triangle *object, Line *ray){
         if(curNode->isLeaf()){
             for(auto obj : curNode->objects){
-                if(object->firstVertex == obj->triangle->firstVertex &&
-                   object->secondVertex == obj->triangle->secondVertex &&
-                   object->thirdVertex == obj->triangle->thirdVertex){
+                if(*obj->triangle == *object){
+                    obj->triangle->print();
+                    obj->MBP.toConsole();
+                    cout << "Line and current node intersection: " << ray->doesIntersectParallelepiped(obj->MBP);
+                    cout << '\n';
+                    cout << "========================================" << '\n';
                     curNode->MBP->toConsole();
+                    cout << "Line and current node intersection: " << ray->doesIntersectParallelepiped(*curNode->MBP);
+                    cout << '\n';
+                    Node* parentNode = curNode->parentNode;
+                    while(parentNode != nullptr){
+                        cout << "========================================" << '\n';
+                        parentNode->MBP->toConsole();
+                        cout <<  "Line and current node intersection: " << ray->doesIntersectParallelepiped(*parentNode->MBP);
+                        cout << '\n';
+                        parentNode = parentNode->parentNode;
+                    }
                     cout << "Line and node intersection: " << ray->doesIntersectParallelepiped(obj->MBP) << '\n';
                 }
                 correct = correct & curNode->MBP->isInside(*obj->triangle->firstVertex);
