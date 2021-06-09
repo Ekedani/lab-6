@@ -1,6 +1,7 @@
 #include "prism.h"
 #include <algorithm>
 #include <iostream>
+
 using namespace std;
 
 
@@ -48,10 +49,7 @@ bool Prism::isInside(const Point &point) const {
     if (!(point.yCoord >= (this->firstPoint->yCoord) && point.yCoord <= (this->secondPoint->yCoord))) {
         return false;
     }
-    if (!(point.zCoord >= (this->firstPoint->zCoord) && point.zCoord <= (this->secondPoint->zCoord))) {
-        return false;
-    }
-    return true;
+    return point.zCoord >= (this->firstPoint->zCoord) && point.zCoord <= (this->secondPoint->zCoord);
 }
 
 double Prism::volume() const {

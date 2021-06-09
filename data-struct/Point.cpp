@@ -1,5 +1,8 @@
-//
-// Created by name on 07.06.2021.
-//
-
 #include "Point.h"
+
+double Point::distanceTo(const Point &other) const {
+    double deltaX = (this->xCoord - other.xCoord);
+    double deltaY = (this->yCoord - other.yCoord);
+    double deltaZ = (this->zCoord - other.zCoord);
+    return sqrt(deltaX * deltaX + deltaY * deltaY + deltaZ * deltaZ);
+}

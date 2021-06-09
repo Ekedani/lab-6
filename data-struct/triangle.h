@@ -35,7 +35,7 @@ struct Line {
 
     double triangle_intersection(const Triangle &triangle) const;
 
-    Point intersectionWithTriangle(const Triangle &triangle);
+    Point getTriangleIntersectionPoint(const Triangle &triangle);
 
     Point locationWhenX(double x);
 

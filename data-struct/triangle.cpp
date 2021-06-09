@@ -54,7 +54,7 @@ double Line::triangle_intersection(const Triangle &triangle) const {
     return Vector3::dot(e2, qvec) * inv_det;
 }
 
-Point Line::intersectionWithTriangle(const Triangle &triangle) {
+Point Line::getTriangleIntersectionPoint(const Triangle &triangle) {
     Vector3 dir(p2->xCoord, p2->yCoord, p2->zCoord);
     Vector3 e1(*triangle.firstVertex, *triangle.secondVertex);
     Vector3 e2(*triangle.firstVertex, *triangle.thirdVertex);
