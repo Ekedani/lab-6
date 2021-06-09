@@ -110,7 +110,7 @@ void rTree::splitNotLeafNode(Node *curNode, Node *insertedNode) {
 
     minimalFirstNode->parentNode = curNode->parentNode;
     minimalSecondNode->parentNode = curNode->parentNode;
-    for(auto node : minimalSecondNode->nodes){
+    for (auto node : minimalSecondNode->nodes) {
         node->parentNode = minimalSecondNode;
     }
 
@@ -291,7 +291,6 @@ rTree::rTree() {
     root = new Node;
     root->parentNode = nullptr;
     root->updateMBP();
-    numOfInserted = 0;
 }
 
 void Node::updateMBP() {

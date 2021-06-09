@@ -9,10 +9,9 @@ int main() {
     //Пока что работает только с кратными 4 размерами, потом пофиксим
     const int size = 256;
     vector<Triangle*> testVec;
-    testVec = objFileReader::readTriangles(/*Insert path to file*/"");
+    testVec = objFileReader::readTriangles(/*Insert path to file*/"G:\\my-repos\\lab-6\\cow.obj");
 
     rTree testTree;
-    cout << testVec.size() << '\n';
 
     for (auto & i : testVec) {
         testTree.insertTriangle(i);
