@@ -27,6 +27,10 @@ double Vector3::Length() const {
     return sqrt(xCoord * xCoord + yCoord * yCoord + zCoord * zCoord);
 }
 
+double Vector3::cosine(const Vector3 &a, const Vector3 &b) {
+    return Vector3::dot(a,b)/(a.Length() * b.Length());
+}
+
 Plane::Plane(const Point& a, const Point& b, const Point& c){
     A = b.yCoord * c.zCoord - a.yCoord * c.zCoord - b.yCoord * a.zCoord
         - c.yCoord * b.zCoord + c.yCoord * a.zCoord + a.yCoord * b.zCoord;
@@ -39,50 +43,50 @@ Plane::Plane(const Point& a, const Point& b, const Point& c){
 
 Point Line::locationWhenX(double x) {
     Point realP2
-            {p1->xCoord + p2->xCoord,
-             p1->yCoord + p2->yCoord,
-             p1->zCoord + p2->zCoord
+            {point->xCoord + vec->xCoord,
+             point->yCoord + vec->yCoord,
+             point->zCoord + vec->zCoord
             };
-    double deltaX = realP2.xCoord - p1->xCoord;
-    double deltaY = realP2.yCoord - p1->yCoord;
-    double deltaZ = realP2.zCoord - p1->zCoord;
+    double deltaX = realP2.xCoord - point->xCoord;
+    double deltaY = realP2.yCoord - point->yCoord;
+    double deltaZ = realP2.zCoord - point->zCoord;
 
-    double y_component = (x - p1->xCoord) * deltaY / deltaX + p1->yCoord;
-    double z_component = (x - p1->xCoord) * deltaZ / deltaX + p1->zCoord;
+    double y_component = (x - point->xCoord) * deltaY / deltaX + point->yCoord;
+    double z_component = (x - point->xCoord) * deltaZ / deltaX + point->zCoord;
     Point location{x, y_component, z_component};
     return location;
 }
 
 Point Line::locationWhenY(double y) {
     Point realP2
-            {p1->xCoord + p2->xCoord,
-             p1->yCoord + p2->yCoord,
-             p1->zCoord + p2->zCoord
+            {point->xCoord + vec->xCoord,
+             point->yCoord + vec->yCoord,
+             point->zCoord + vec->zCoord
             };
 
-    double deltaX = realP2.xCoord - p1->xCoord;
-    double deltaY = realP2.yCoord - p1->yCoord;
-    double deltaZ = realP2.zCoord - p1->zCoord;
+    double deltaX = realP2.xCoord - point->xCoord;
+    double deltaY = realP2.yCoord - point->yCoord;
+    double deltaZ = realP2.zCoord - point->zCoord;
 
-    double x_component = (y - p1->yCoord) * deltaX / deltaY + p1->xCoord;
-    double z_component = (y - p1->yCoord) * deltaZ / deltaY + p1->zCoord;
+    double x_component = (y - point->yCoord) * deltaX / deltaY + point->xCoord;
+    double z_component = (y - point->yCoord) * deltaZ / deltaY + point->zCoord;
     Point location{x_component, y, z_component};
     return location;
 }
 
 Point Line::locationWhenZ(double z) {
     Point realP2
-            {p1->xCoord + p2->xCoord,
-             p1->yCoord + p2->yCoord,
-             p1->zCoord + p2->zCoord
+            {point->xCoord + vec->xCoord,
+             point->yCoord + vec->yCoord,
+             point->zCoord + vec->zCoord
             };
 
-    double deltaX = realP2.xCoord - p1->xCoord;
-    double deltaY = realP2.yCoord - p1->yCoord;
-    double deltaZ = realP2.zCoord - p1->zCoord;
+    double deltaX = realP2.xCoord - point->xCoord;
+    double deltaY = realP2.yCoord - point->yCoord;
+    double deltaZ = realP2.zCoord - point->zCoord;
 
-    double x_component = (z - p1->zCoord) * deltaX / deltaZ + p1->xCoord;
-    double y_component = (z - p1->zCoord) * deltaY / deltaZ + p1->yCoord;
+    double x_component = (z - point->zCoord) * deltaX / deltaZ + point->xCoord;
+    double y_component = (z - point->zCoord) * deltaY / deltaZ + point->yCoord;
     Point location{x_component, y_component, z};
     return location;
 }
@@ -122,7 +126,7 @@ bool Line::doesIntersectParallelepiped(const Prism &prism) {
 }
 
 bool Triangle::intersectLine(const Line& line) const {
-    Vector3 dir(line.p2->xCoord, line.p2->yCoord, line.p2->zCoord);
+    Vector3 dir(line.vec->xCoord, line.vec->yCoord, line.vec->zCoord);
 
     Vector3 e1(*firstVertex, *secondVertex);
     Vector3 e2(*firstVertex, *thirdVertex);
@@ -135,7 +139,7 @@ bool Triangle::intersectLine(const Line& line) const {
     }
 
     double inv_det = 1 / det;
-    Vector3 tvec(*firstVertex, *line.p1);
+    Vector3 tvec(*firstVertex, *line.point);
     double u = Vector3::dot(tvec, pvec) * inv_det;
     if (u < 0 || u > 1) {
         return 0;
@@ -150,8 +154,8 @@ bool Triangle::intersectLine(const Line& line) const {
 
 Point Triangle::IntersectionPoint(const Line &line) {
     Plane plane(*firstVertex, *secondVertex, *thirdVertex);
-    double k = plane.A * line.p2->xCoord + plane.B * line.p2->yCoord + plane.C * line.p2->zCoord;
-    double t = -(plane.A * line.p1->xCoord + plane.B * line.p1->yCoord + plane.C * line.p1->zCoord + plane.D) / k;
-    Point Intersection = Point{line.p1->xCoord + line.p2->xCoord * t, line.p1->yCoord + line.p2->yCoord * t, line.p1->zCoord + line.p2->zCoord * t};
+    double k = plane.A * line.vec->xCoord + plane.B * line.vec->yCoord + plane.C * line.vec->zCoord;
+    double t = -(plane.A * line.point->xCoord + plane.B * line.point->yCoord + plane.C * line.point->zCoord + plane.D) / k;
+    Point Intersection = Point{line.point->xCoord + line.vec->xCoord * t, line.point->yCoord + line.vec->yCoord * t, line.point->zCoord + line.vec->zCoord * t};
     return Intersection;
 }

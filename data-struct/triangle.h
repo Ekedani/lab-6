@@ -20,12 +20,14 @@ public:
 
     static Vector3 cross(const Vector3 &v1, const Vector3 &v2);
 
+    static double cosine(const Vector3 &a, const Vector3 &b);
+
     double Length() const;
 };
 
 struct Line {
-    Point *p1;
-    Point *p2; // actually, it isn't a real second point, it's a vector
+    Point *point;
+    Point *vec; // actually, it isn't a real second point, it's a vector
 
     Point locationWhenX(double x);
 
