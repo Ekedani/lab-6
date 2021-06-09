@@ -121,7 +121,7 @@ bool Line::doesIntersectParallelepiped(const Prism &prism) {
 
 }
 
-double Triangle::intersectLine(const Line& line) const {
+bool Triangle::intersectLine(const Line& line) const {
     Vector3 dir(line.p2->xCoord, line.p2->yCoord, line.p2->zCoord);
 
     Vector3 e1(*firstVertex, *secondVertex);
@@ -146,4 +146,12 @@ double Triangle::intersectLine(const Line& line) const {
         return 0;
     }
     return Vector3::dot(e2, qvec) * inv_det;
+}
+
+Point Triangle::IntersectionPoint(const Line &line) {
+    Plane plane(*firstVertex, *secondVertex, *thirdVertex);
+    double k = plane.A * line.p2->xCoord + plane.B * line.p2->yCoord + plane.C * line.p2->zCoord;
+    double t = -(plane.A * line.p1->xCoord + plane.B * line.p1->yCoord + plane.C * line.p1->zCoord + plane.D) / k;
+    Point Intersection = Point{line.p1->xCoord + line.p2->xCoord * t, line.p1->yCoord + line.p2->yCoord * t, line.p1->zCoord + line.p2->zCoord * t};
+    return Intersection;
 }

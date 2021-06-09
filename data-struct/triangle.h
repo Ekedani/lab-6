@@ -23,11 +23,6 @@ public:
     double Length() const;
 };
 
-struct Plane {
-    double A, B, C, D; //Ax+By+C+D=0
-    Plane(const Point& a, const Point& b, const Point& c);
-};
-
 struct Line {
     Point *p1;
     Point *p2; // actually, it isn't a real second point, it's a vector
@@ -41,9 +36,15 @@ struct Line {
     bool doesIntersectParallelepiped(const Prism &prism);
 };
 
+struct Plane {
+    double A, B, C, D; //Ax+By+C+D=0
+    Plane(const Point& a, const Point& b, const Point& c);
+};
+
 struct Triangle {
     Point *firstVertex;
     Point *secondVertex;
     Point *thirdVertex;
-    double intersectLine(const Line& line) const;
+    bool intersectLine(const Line& line) const;
+    Point IntersectionPoint(const Line& line);
 };
