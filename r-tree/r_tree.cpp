@@ -31,6 +31,11 @@ std::vector<Triangle *> rTree::findObjectsUsingRay(Line curRay) {
             }
         }
     }
+    //Сортировка по ближайшим вершинам (Вершин немного, так что на производительность не влияет)
+    std::sort(result.begin(), result.end(), [curRay](Triangle* fTr, Triangle* sTr){
+        return curRay.point->distanceTo(fTr->IntersectionPoint(curRay)) <
+        curRay.point->distanceTo(sTr->IntersectionPoint(curRay));
+    });
     return result;
 }
 

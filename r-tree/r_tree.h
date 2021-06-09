@@ -1,6 +1,7 @@
 #include <vector>
 #include "../data-struct/triangle.h"
 #include <cfloat>
+#include <algorithm>
 
 struct TriangleLeaf {
     Triangle *triangle;

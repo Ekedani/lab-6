@@ -46,8 +46,9 @@ int main() {
             };
 
             Line ray;
-            ray.p1 = &positionOnPlane;
-            ray.p2 = &CameraPos;
+
+            ray.point = &CameraPos;
+            ray.vec = &positionOnPlane;
 
 
             if (!testTree.findObjectsUsingRay(ray).empty()) {
