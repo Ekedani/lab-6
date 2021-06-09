@@ -85,6 +85,8 @@ int main() {
             for (int k = 0; k < testVec.size(); ++k) {
                 if (ray.triangle_intersection(*testVec[k]) != 0) {
                     cout << "Ray triangle intersec: " << ray.triangle_intersection(*testVec[k]) << '\n';
+                    TriangleLeaf testLeafTr(testVec[k]);
+                    cout << "Ray triangle MBP intersec: " << ray.doesIntersectParallelepiped(testLeafTr.MBP) << '\n';
                     cout << "Ray: " << '\n';
                     ray.p1->print();
                     ray.p2->print();

@@ -81,6 +81,8 @@ public:
                 if(*obj->triangle == *object){
                     root->MBP->toConsole();
                 }
+                correct = correct & root->MBP->isInside(*obj->MBP.getFirstPoint());
+                correct = correct & root->MBP->isInside(*obj->MBP.getSecondPoint());
                 correct = correct & root->MBP->isInside(*obj->triangle->firstVertex);
                 correct = correct & root->MBP->isInside(*obj->triangle->secondVertex);
                 correct = correct & root->MBP->isInside(*obj->triangle->thirdVertex);
@@ -120,6 +122,8 @@ public:
                     }
                     cout << "Line and node intersection: " << ray->doesIntersectParallelepiped(obj->MBP) << '\n';
                 }
+                correct = correct & curNode->MBP->isInside(*obj->MBP.getFirstPoint());
+                correct = correct & curNode->MBP->isInside(*obj->MBP.getSecondPoint());
                 correct = correct & curNode->MBP->isInside(*obj->triangle->firstVertex);
                 correct = correct & curNode->MBP->isInside(*obj->triangle->secondVertex);
                 correct = correct & curNode->MBP->isInside(*obj->triangle->thirdVertex);
