@@ -24,7 +24,7 @@ int main() {
     Point p2{-0.440513, 0.048295, -0.065657};
     Point p3{-0.43362, 0.069116 , -0.048645};
     ////ЛУЧ
-    Point p4{-0.433013, 0.0676582, -4};
+    Point p4{-0.09, 0.01, -4};
     Point p5{0, 0, -5};
     Triangle *testTriangle = new Triangle{&p1, &p2, &p3};
     Line newline{&p4, &p5};
@@ -50,7 +50,7 @@ int main() {
     newline.p2->print();
     cout << "Triangle: " << '\n';
 
-    testTree.debugTreeParse(testTriangle, &newline);
+    //testTree.debugTreeParse(testTriangle, &newline);
 
     Point CameraPos{0,0, -5};
     Point CameraDir{0, 0, 1};
@@ -82,22 +82,25 @@ int main() {
             ray.p1 = &positionOnPlane;
             ray.p2 = &CameraPos;
 
-/*
             for (int k = 0; k < testVec.size(); ++k) {
                 if (ray.triangle_intersection(*testVec[k]) != 0) {
-                    //cout << "V" << endl;
+                    cout << "Ray triangle intersec: " << ray.triangle_intersection(*testVec[k]) << '\n';
+                    cout << "Ray: " << '\n';
+                    ray.p1->print();
+                    ray.p2->print();
+                    cout << "Triangle: " << '\n';
+                    testTree.debugTreeParse(testVec[k], &ray);
                     test[i][j].redComponent =  100;
                     test[i][j].greenComponent = 100;
                     test[i][j].blueComponent = 100;
                     break;
                 }
             }
-             */
 
             if (!testTree.findObjectsUsingRay(ray).empty()) {
-                test[i][j].redComponent =  100;
-                test[i][j].greenComponent = 100;
-                test[i][j].blueComponent = 100;
+                test[i][j].redComponent =  0;
+                test[i][j].greenComponent = 0;
+                test[i][j].blueComponent = 255;
             }
         }
     }
