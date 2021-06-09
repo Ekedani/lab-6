@@ -62,7 +62,7 @@ public:
 
 struct Line {
     Point* p1;
-    Point* p2;
+    Point* p2; // actually, it isn't a real second point, it's a vector
     double triangle_intersection(const Triangle& triangle) const {
         Vector3 dir(p2->xCoord, p2->yCoord, p2->zCoord);
 
@@ -105,9 +105,14 @@ struct Line {
     }
 
     Point locationWhenX(double x) {
-        double deltaX = p2->xCoord - p1->xCoord;
-        double deltaY = p2->yCoord - p1->yCoord;
-        double deltaZ = p2->zCoord - p1->zCoord;
+        Point realP2
+                {p1->xCoord+p2->xCoord,
+                 p1->yCoord+p2->yCoord,
+                 p1->zCoord+p2->zCoord
+                };
+        double deltaX = realP2.xCoord - p1->xCoord;
+        double deltaY = realP2.yCoord - p1->yCoord;
+        double deltaZ = realP2.zCoord - p1->zCoord;
 
         double y_component = (x - p1->xCoord)*deltaY/deltaX + p1->yCoord;
         double z_component = (x - p1->xCoord)*deltaZ/deltaX + p1->zCoord;
@@ -116,9 +121,15 @@ struct Line {
     }
 
     Point locationWhenY(double y) {
-        double deltaX = p2->xCoord - p1->xCoord;
-        double deltaY = p2->yCoord - p1->yCoord;
-        double deltaZ = p2->zCoord - p1->zCoord;
+        Point realP2
+                {p1->xCoord+p2->xCoord,
+                 p1->yCoord+p2->yCoord,
+                 p1->zCoord+p2->zCoord
+                };
+
+        double deltaX = realP2.xCoord - p1->xCoord;
+        double deltaY = realP2.yCoord - p1->yCoord;
+        double deltaZ = realP2.zCoord - p1->zCoord;
 
         double x_component = (y - p1->yCoord)*deltaX/deltaY + p1->xCoord;
         double z_component = (y - p1->yCoord)*deltaZ/deltaY + p1->zCoord;
@@ -127,9 +138,15 @@ struct Line {
     }
 
     Point locationWhenZ(double z) {
-        double deltaX = p2->xCoord - p1->xCoord;
-        double deltaY = p2->yCoord - p1->yCoord;
-        double deltaZ = p2->zCoord - p1->zCoord;
+        Point realP2
+                {p1->xCoord+p2->xCoord,
+                 p1->yCoord+p2->yCoord,
+                 p1->zCoord+p2->zCoord
+                };
+
+        double deltaX = realP2.xCoord - p1->xCoord;
+        double deltaY = realP2.yCoord - p1->yCoord;
+        double deltaZ = realP2.zCoord - p1->zCoord;
 
         double x_component = (z - p1->zCoord)*deltaX/deltaZ + p1->xCoord;
         double y_component = (z - p1->zCoord)*deltaY/deltaZ + p1->yCoord;

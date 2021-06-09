@@ -41,6 +41,29 @@ struct Node {
     bool isLeaf() const;
 
     void updateMBP();
+    void recursiveUpdateMBP(){
+        if(this->isLeaf()){
+            this->updateMBP();
+        }
+        else{
+            for (auto node : nodes) {
+                recursiveUpdateMBP(node);
+            }
+            this->updateMBP();
+        }
+    }
+
+    void recursiveUpdateMBP(Node *curNode){
+        if(curNode->isLeaf()){
+            curNode->updateMBP();
+        }
+        else{
+            for (auto node : curNode->nodes) {
+                recursiveUpdateMBP(node);
+            }
+            curNode->updateMBP();
+        }
+    }
 };
 
 
