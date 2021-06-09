@@ -27,45 +27,14 @@ double Vector3::Length() const {
     return sqrt(xCoord * xCoord + yCoord * yCoord + zCoord * zCoord);
 }
 
-double Line::triangle_intersection(const Triangle &triangle) const {
-    Vector3 dir(p2->xCoord, p2->yCoord, p2->zCoord);
-
-    Vector3 e1(*triangle.firstVertex, *triangle.secondVertex);
-    Vector3 e2(*triangle.firstVertex, *triangle.thirdVertex);
-
-    Vector3 pvec = Vector3::cross(dir, e2);
-    double det = Vector3::dot(e1, pvec);
-
-    if (det < 1e-8 && det > -1e-8) {
-        return 0;
-    }
-
-    double inv_det = 1 / det;
-    Vector3 tvec(*triangle.firstVertex, *p1);
-    double u = Vector3::dot(tvec, pvec) * inv_det;
-    if (u < 0 || u > 1) {
-        return 0;
-    }
-    Vector3 qvec = Vector3::cross(tvec, e1);
-    double v = Vector3::dot(dir, qvec) * inv_det;
-    if (v < 0 || u + v > 1) {
-        return 0;
-    }
-    return Vector3::dot(e2, qvec) * inv_det;
-}
-
-Point Line::getTriangleIntersectionPoint(const Triangle &triangle) {
-    Vector3 dir(p2->xCoord, p2->yCoord, p2->zCoord);
-    Vector3 e1(*triangle.firstVertex, *triangle.secondVertex);
-    Vector3 e2(*triangle.firstVertex, *triangle.thirdVertex);
-    Vector3 pvec = Vector3::cross(dir, e2);
-    double det = Vector3::dot(e1, pvec);
-    double inv_det = 1 / det;
-    Vector3 tvec(*triangle.firstVertex, *p1);
-    double u = Vector3::dot(tvec, pvec) * inv_det;
-    double x = u;
-
-    return this->locationWhenX(x);
+Plane::Plane(const Point& a, const Point& b, const Point& c){
+    A = b.yCoord * c.zCoord - a.yCoord * c.zCoord - b.yCoord * a.zCoord
+        - c.yCoord * b.zCoord + c.yCoord * a.zCoord + a.yCoord * b.zCoord;
+    B = b.zCoord * c.xCoord - a.zCoord * c.xCoord
+        - b.zCoord * a.xCoord - c.zCoord * b.xCoord + c.zCoord * a.xCoord + a.zCoord * b.xCoord;
+    C = b.xCoord * c.yCoord - a.xCoord * c.yCoord
+        - b.xCoord * a.yCoord - c.xCoord * b.yCoord + c.xCoord * a.yCoord + a.xCoord * b.yCoord;
+    D = -a.xCoord * A - a.yCoord * B - a.zCoord * C;
 }
 
 Point Line::locationWhenX(double x) {
@@ -150,4 +119,31 @@ bool Line::doesIntersectParallelepiped(const Prism &prism) {
     }
     return prism.isInside(this->locationWhenZ(z_2));
 
+}
+
+double Triangle::intersectLine(const Line& line) const {
+    Vector3 dir(line.p2->xCoord, line.p2->yCoord, line.p2->zCoord);
+
+    Vector3 e1(*firstVertex, *secondVertex);
+    Vector3 e2(*firstVertex, *thirdVertex);
+
+    Vector3 pvec = Vector3::cross(dir, e2);
+    double det = Vector3::dot(e1, pvec);
+
+    if (det < 1e-8 && det > -1e-8) {
+        return 0;
+    }
+
+    double inv_det = 1 / det;
+    Vector3 tvec(*firstVertex, *line.p1);
+    double u = Vector3::dot(tvec, pvec) * inv_det;
+    if (u < 0 || u > 1) {
+        return 0;
+    }
+    Vector3 qvec = Vector3::cross(tvec, e1);
+    double v = Vector3::dot(dir, qvec) * inv_det;
+    if (v < 0 || u + v > 1) {
+        return 0;
+    }
+    return Vector3::dot(e2, qvec) * inv_det;
 }

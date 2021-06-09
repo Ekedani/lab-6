@@ -7,12 +7,6 @@
 
 using namespace std;
 
-struct Triangle {
-    Point *firstVertex;
-    Point *secondVertex;
-    Point *thirdVertex;
-};
-
 class Vector3 {
     double xCoord;
     double yCoord;
@@ -29,13 +23,14 @@ public:
     double Length() const;
 };
 
+struct Plane {
+    double A, B, C, D; //Ax+By+C+D=0
+    Plane(const Point& a, const Point& b, const Point& c);
+};
+
 struct Line {
     Point *p1;
     Point *p2; // actually, it isn't a real second point, it's a vector
-
-    double triangle_intersection(const Triangle &triangle) const;
-
-    Point getTriangleIntersectionPoint(const Triangle &triangle);
 
     Point locationWhenX(double x);
 
@@ -44,4 +39,11 @@ struct Line {
     Point locationWhenZ(double z);
 
     bool doesIntersectParallelepiped(const Prism &prism);
+};
+
+struct Triangle {
+    Point *firstVertex;
+    Point *secondVertex;
+    Point *thirdVertex;
+    double intersectLine(const Line& line) const;
 };
