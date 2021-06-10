@@ -2,6 +2,7 @@
 #include "obj-reader/objFileReader.h"
 #include "work-with-bmp/bitmapRender.h"
 #include "r-tree/r_tree.h"
+#include "rendering/renderer.h"
 
 using namespace std;
 
@@ -19,8 +20,11 @@ int main() {
 
     bitmapRender test(size, size);
 
-    Point CameraPos{0, 0, -5};
+    Point CameraPos{0, 0, -1.5};
     Point CameraDir{0, 0, 1};
+
+    Point PL{1, 1, 1};
+    //LightSource PL(&tmpP);
     Point PlaneOrigin{CameraPos.xCoord + CameraDir.xCoord,
                       CameraPos.yCoord + CameraDir.yCoord,
                       CameraPos.zCoord + CameraDir.zCoord};
@@ -45,20 +49,40 @@ int main() {
                     PlaneOrigin.zCoord + 0
             };
 
+            Point vectorPositionOnPlane{positionOnPlane.xCoord-CameraPos.xCoord,
+                                        positionOnPlane.yCoord-CameraPos.yCoord,
+                                        positionOnPlane.zCoord-CameraPos.zCoord};
+
             Line ray;
 
             ray.point = &CameraPos;
-            ray.vec = &positionOnPlane;
+            ray.vec = &vectorPositionOnPlane;
 
 
-            if (!testTree.findObjectsUsingRay(ray).empty()) {
-                test[i][j].redComponent = 0;
-                test[i][j].greenComponent = 0;
-                test[i][j].blueComponent = 255;
+            vector <Triangle*> searchResults = testTree.findObjectsUsingRay(ray);
+            if (!searchResults.empty()) {
+                Point tmpPoint = searchResults[0]->IntersectionPoint(ray);
+                Vector3 tmpVector1{tmpPoint.xCoord - PL.xCoord, tmpPoint.xCoord - PL.yCoord, tmpPoint.zCoord - PL.zCoord};
+                Vector3 tmpVector2{ray.vec->xCoord, ray.vec->yCoord, ray.vec->zCoord};
+                Point tmpPoint1{tmpPoint.xCoord - PL.xCoord, tmpPoint.xCoord - PL.yCoord, tmpPoint.zCoord - PL.zCoord};
+                //Луч освещения
+                Line lightLine;
+                lightLine.vec = &tmpPoint1;
+                lightLine.point = &PL;
+                vector<Triangle*> lightSearchVec = testTree.findObjectsUsingRay(lightLine);
+                if(lightSearchVec[0] == searchResults[0]){
+                    double coef = fabs(Vector3::cosine(tmpVector1, tmpVector2));
+                    test[i][j].redComponent = 255 * coef;
+                    test[i][j].greenComponent = 0 * coef;
+                    test[i][j].blueComponent = 255 * coef;
+                }
+                else{
+                    test[i][j].redComponent = 0;
+                    test[i][j].greenComponent = 0 ;
+                    test[i][j].blueComponent = 0;
+                }
             }
         }
     }
-
     test.writeToFile("lol.bmp");
-
 }
