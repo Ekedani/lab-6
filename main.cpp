@@ -82,7 +82,8 @@ int main() {
                 vector<Triangle*> lightSearchVec = testTree.findObjectsUsingRay(lightLine);
 
                 if(lightSearchVec[0] == searchResults[0]){
-                    double coef = fabs(Vector3::cosine(tmpVector1, tmpVector2));
+                    Vector3 normVec = searchResults[0]->normal();
+                    double coef = fabs(Vector3::cosine(normVec, tmpVector2));
                     test[i][j].redComponent = 255 * coef;
                     test[i][j].greenComponent = 0 * coef;
                     test[i][j].blueComponent = 255 * coef;
