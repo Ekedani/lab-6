@@ -61,15 +61,26 @@ int main() {
 
             vector <Triangle*> searchResults = testTree.findObjectsUsingRay(ray);
             if (!searchResults.empty()) {
-                Point tmpPoint = searchResults[0]->IntersectionPoint(ray);
-                Vector3 tmpVector1{tmpPoint.xCoord - PL.xCoord, tmpPoint.xCoord - PL.yCoord, tmpPoint.zCoord - PL.zCoord};
+
+                Point IntersectionPoint = searchResults[0]->IntersectionPoint(ray);
+
+
+                Point vecIntersectionPoint{IntersectionPoint.xCoord - PL.xCoord,
+                                           IntersectionPoint.yCoord - PL.yCoord,
+                                           IntersectionPoint.zCoord - PL.zCoord};
+
+                Vector3 tmpVector1{IntersectionPoint.xCoord - PL.xCoord,
+                                   IntersectionPoint.xCoord - PL.yCoord,
+                                   IntersectionPoint.zCoord - PL.zCoord};
                 Vector3 tmpVector2{ray.vec->xCoord, ray.vec->yCoord, ray.vec->zCoord};
-                Point tmpPoint1{tmpPoint.xCoord - PL.xCoord, tmpPoint.xCoord - PL.yCoord, tmpPoint.zCoord - PL.zCoord};
+
                 //Луч освещения
                 Line lightLine;
-                lightLine.vec = &tmpPoint1;
                 lightLine.point = &PL;
+                lightLine.vec = &vecIntersectionPoint;
+
                 vector<Triangle*> lightSearchVec = testTree.findObjectsUsingRay(lightLine);
+
                 if(lightSearchVec[0] == searchResults[0]){
                     double coef = fabs(Vector3::cosine(tmpVector1, tmpVector2));
                     test[i][j].redComponent = 255 * coef;
@@ -81,8 +92,10 @@ int main() {
                     test[i][j].greenComponent = 0 ;
                     test[i][j].blueComponent = 0;
                 }
+
             }
         }
     }
+
     test.writeToFile("lol.bmp");
 }

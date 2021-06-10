@@ -41,6 +41,10 @@ Plane::Plane(const Point& a, const Point& b, const Point& c){
     D = -a.xCoord * A - a.yCoord * B - a.zCoord * C;
 }
 
+Vector3 Plane::normal() const {
+    return Vector3(A, B, C);
+}
+
 Point Line::locationWhenX(double x) {
     Point realP2
             {point->xCoord + vec->xCoord,
@@ -158,4 +162,9 @@ Point Triangle::IntersectionPoint(const Line &line) {
     double t = -(plane.A * line.point->xCoord + plane.B * line.point->yCoord + plane.C * line.point->zCoord + plane.D) / k;
     Point Intersection = Point{line.point->xCoord + line.vec->xCoord * t, line.point->yCoord + line.vec->yCoord * t, line.point->zCoord + line.vec->zCoord * t};
     return Intersection;
+}
+
+Vector3 Triangle::normal() const {
+    Plane plane(*firstVertex, *secondVertex, *thirdVertex);
+    return plane.normal();
 }

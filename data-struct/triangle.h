@@ -41,6 +41,7 @@ struct Line {
 struct Plane {
     double A, B, C, D; //Ax+By+C+D=0
     Plane(const Point& a, const Point& b, const Point& c);
+    Vector3 normal() const;
 };
 
 struct Triangle {
@@ -49,4 +50,5 @@ struct Triangle {
     Point *thirdVertex;
     bool intersectLine(const Line& line) const;
     Point IntersectionPoint(const Line& line);
+    Vector3 normal() const;
 };
