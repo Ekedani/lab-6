@@ -60,12 +60,12 @@ void bitmapRender::writePixelsToFile(const std::string &address) const {
 void bitmapRender::writeLine(std::ofstream &file, int proceededLines) const {
     for (int counter = 0; counter < width; ++counter) {
         //Запись цвета пикселя
-        uint8_t red = pixels[proceededLines][counter].redComponent;
-        file.write((char *) &red, sizeof(uint8_t));
-        uint8_t green = pixels[proceededLines][counter].greenComponent;
-        file.write((char *) &green, sizeof(uint8_t));
         uint8_t blue = pixels[proceededLines][counter].blueComponent;
         file.write((char *) &blue, sizeof(uint8_t));
+        uint8_t green = pixels[proceededLines][counter].greenComponent;
+        file.write((char *) &green, sizeof(uint8_t));
+        uint8_t red = pixels[proceededLines][counter].redComponent;
+        file.write((char *) &red, sizeof(uint8_t));
     }
 }
 
