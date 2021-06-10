@@ -8,19 +8,30 @@
 using namespace std;
 
 class Vector3 {
+public:
     double xCoord;
     double yCoord;
     double zCoord;
-public:
+
     Vector3(double x, double y, double z);
 
     Vector3(const Point &start, const Point &end);
+
+    Vector3(const Vector3 &vec);
+
+    Vector3& operator=(const Vector3 &vec);
+
+    Vector3 operator+(const Vector3& vec);
+
+    Vector3 operator*(const double coefficient);
 
     static double dot(const Vector3 &v1, const Vector3 &v2);
 
     static Vector3 cross(const Vector3 &v1, const Vector3 &v2);
 
     static double cosine(const Vector3 &a, const Vector3 &b);
+
+    Vector3 Norm();
 
     double Length() const;
 };

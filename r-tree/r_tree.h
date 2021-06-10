@@ -1,3 +1,4 @@
+#pragma once
 #include <vector>
 #include "../data-struct/triangle.h"
 #include <cfloat>

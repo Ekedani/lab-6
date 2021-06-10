@@ -19,15 +19,33 @@ int main() {
 
     bitmapRender test(size, size);
 
-    Point CameraPos{0, 0, -1.5};
-    Point CameraDir{0, 0, 1};
+    Point CameraPos{1, 1, 0};
+    Point CameraDir{0, 0, 0};
 
     Point PL{1, 1, 1};
     //LightSource PL(&tmpP);
-    Point PlaneOrigin{CameraPos.xCoord + CameraDir.xCoord,
-                      CameraPos.yCoord + CameraDir.yCoord,
-                      CameraPos.zCoord + CameraDir.zCoord};
+
+
+    Vector3 dir(CameraPos, CameraDir);
+    dir = dir.Norm();
+
+    Vector3 up (0,0,1);
+    Vector3 right = Vector3::cross(dir, up);
+    right = right.Norm();
+    Vector3 actual_up = Vector3::cross(right,dir);
+    actual_up = actual_up.Norm();
+
+    Point PlaneOrigin{CameraPos.xCoord + dir.xCoord,
+                      CameraPos.yCoord + dir.yCoord,
+                      CameraPos.zCoord + dir.zCoord};
+
     double fov = 60;
+    double distanceToPlaneFromCamera = CameraPos.distanceTo(PlaneOrigin);
+    double fovInRad = (fov / 180) * 3.14159265;
+    double realPlaneHeight = distanceToPlaneFromCamera * tan(fovInRad);
+
+    actual_up = actual_up*(realPlaneHeight/2);
+    right = right*(realPlaneHeight/2);
 
     for (int i = 0; i < size; ++i) {
         for (int j = 0; j < size; ++j) {
@@ -36,21 +54,14 @@ int main() {
             test[i][j].greenComponent = 255;
             test[i][j].blueComponent = 255;
 
-            double xCoord = (i - size / 2) / (double) size;
-            double yCoord = -(j - size / 2) / (double) size;
+            double iNorm = (i - size / 2) / (double) size;
+            double jNorm = -(j - size / 2) / (double) size;
 
-            double distanceToPlaneFromCamera = CameraPos.distanceTo(PlaneOrigin);
-            double fovInRad = (fov / 180) * 3.14159265;
-            double realPlaneHeight = distanceToPlaneFromCamera * tan(fovInRad);
-            Point positionOnPlane{
-                    PlaneOrigin.xCoord + xCoord * realPlaneHeight / 2,
-                    PlaneOrigin.yCoord + yCoord * realPlaneHeight / 2,
-                    PlaneOrigin.zCoord + 0
-            };
+            Vector3 vecPosOnPlane = dir + (actual_up*iNorm) + (right*jNorm);
 
-            Point vectorPositionOnPlane{positionOnPlane.xCoord-CameraPos.xCoord,
-                                        positionOnPlane.yCoord-CameraPos.yCoord,
-                                        positionOnPlane.zCoord-CameraPos.zCoord};
+            Point vectorPositionOnPlane{vecPosOnPlane.xCoord,
+                                        vecPosOnPlane.yCoord,
+                                        vecPosOnPlane.zCoord};
 
             Line ray;
 
@@ -98,4 +109,5 @@ int main() {
     }
 
     test.writeToFile("lol.bmp");
+
 }

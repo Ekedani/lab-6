@@ -1,3 +1,4 @@
+
 #include "triangle.h"
 
 Vector3::Vector3(double x, double y, double z) {
@@ -29,6 +30,42 @@ double Vector3::Length() const {
 
 double Vector3::cosine(const Vector3 &a, const Vector3 &b) {
     return Vector3::dot(a,b)/(a.Length() * b.Length());
+}
+
+Vector3 Vector3::Norm() {
+    double length = this->Length();
+    if (length==0) {
+        return Vector3(0,0,0);
+    }
+    return Vector3(xCoord/length, yCoord/length, zCoord/length);
+}
+
+Vector3::Vector3(const Vector3& vec) {
+    this->xCoord = vec.xCoord;
+    this->yCoord = vec.yCoord;
+    this->zCoord = vec.zCoord;
+}
+
+Vector3 &Vector3::operator=(const Vector3 &vec) {
+    if (this==&vec) return *this;
+    this->xCoord = vec.xCoord;
+    this->yCoord = vec.yCoord;
+    this->zCoord = vec.zCoord;
+    return *this;
+}
+
+Vector3 Vector3::operator*(const double coefficient) {
+    double x = this->xCoord * coefficient;
+    double y = this->yCoord * coefficient;
+    double z = this->zCoord * coefficient;
+    return Vector3(x,y,z);
+}
+
+Vector3 Vector3::operator+(const Vector3 &vec) {
+    double x = this->xCoord + vec.xCoord;
+    double y = this->yCoord + vec.yCoord;
+    double z = this->zCoord + vec.zCoord;
+    return Vector3(x, y, z);
 }
 
 Plane::Plane(const Point& a, const Point& b, const Point& c){
