@@ -13,6 +13,8 @@ struct LightSource {
 
     Point *sourcePoint;
 
+    LightSource()= default;
+
     //Белый цвет
     explicit LightSource(Point *sourcePoint);
 
@@ -20,19 +22,24 @@ struct LightSource {
     LightSource(Point *sourcePoint, uint16_t R, uint16_t G, uint16_t B);
 };
 
-//В теории будет содержать всю логику рендеринга
+struct Camera{
+    Point pos;
+    Point dir;
+    double fov;
+};
+
+//Содержит всю логику рендеринга
 class Renderer {
 private:
-
+    //Параметры для рендера
+    static const uint8_t BACK_COLOR = 50;
+    Camera renderCamera{};
+    LightSource lamp{};
+    int imgSize;
+    
 public:
-    static void renderOBJ(int imgSize, const std::string& wayToOBJ){
-        vector<Triangle *> triangleVec;
-        triangleVec = objFileReader::readTriangles(wayToOBJ);
-        rTree triangleTree;
-        for (auto &triangle : triangleVec) {
-            triangleTree.insertTriangle(triangle);
-        }
-        bitmapRender renderedImage(imgSize, imgSize);
-    }
+    Renderer(int imgSize, Camera renderCamera, LightSource lamp);
+
+    void renderOBJ(const std::string& wayToOBJ);
 };
 
