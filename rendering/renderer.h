@@ -1,5 +1,10 @@
 #include "../work-with-bmp/bitmapRender.h"
 #include "../data-struct/triangle.h"
+#include "../obj-reader/objFileReader.h"
+#include "../r-tree/r_tree.h"
+
+#include <fstream>
+#include <vector>
 
 struct LightSource {
     uint8_t redComponent;
@@ -20,6 +25,14 @@ class Renderer {
 private:
 
 public:
-
+    static void renderOBJ(int imgSize, const std::string& wayToOBJ){
+        vector<Triangle *> triangleVec;
+        triangleVec = objFileReader::readTriangles(wayToOBJ);
+        rTree triangleTree;
+        for (auto &triangle : triangleVec) {
+            triangleTree.insertTriangle(triangle);
+        }
+        bitmapRender renderedImage(imgSize, imgSize);
+    }
 };
 

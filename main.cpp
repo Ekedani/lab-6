@@ -7,7 +7,6 @@
 using namespace std;
 
 int main() {
-    //Пока что работает только с кратными 4 размерами, потом пофиксим
     const int size = 999;
     vector<Triangle *> testVec;
     testVec = objFileReader::readTriangles(/*Insert path to file*/"G:\\my-repos\\lab-6\\cow.obj");
