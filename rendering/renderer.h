@@ -20,19 +20,18 @@ struct LightSource {
     LightSource(Point *sourcePoint, uint16_t R, uint16_t G, uint16_t B);
 };
 
+struct Camera {
+    Point position;
+    Point direction;
+    double fov;
+};
+
 //В теории будет содержать всю логику рендеринга
 class Renderer {
-private:
+    //Цвет фона
+    static const int8_t BACK_COLOR = 155;
 
 public:
-    static void renderOBJ(int imgSize, const std::string& wayToOBJ){
-        vector<Triangle *> triangleVec;
-        triangleVec = objFileReader::readTriangles(wayToOBJ);
-        rTree triangleTree;
-        for (auto &triangle : triangleVec) {
-            triangleTree.insertTriangle(triangle);
-        }
-        bitmapRender renderedImage(imgSize, imgSize);
-    }
+    static void renderOBJ(int imgSize, const std::string &wayToOBJ);
 };
 
