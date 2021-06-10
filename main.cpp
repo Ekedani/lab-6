@@ -32,8 +32,8 @@ int main() {
     Vector3 up (0,0,1);
     Vector3 right = Vector3::cross(dir, up);
     right = right.Norm();
-    Vector3 actual_up = Vector3::cross(right,dir);
-    actual_up = actual_up.Norm();
+    up = Vector3::cross(right,dir);
+    up = up.Norm();
 
     Point PlaneOrigin{CameraPos.xCoord + dir.xCoord,
                       CameraPos.yCoord + dir.yCoord,
@@ -44,7 +44,7 @@ int main() {
     double fovInRad = (fov / 180) * 3.14159265;
     double realPlaneHeight = distanceToPlaneFromCamera * tan(fovInRad);
 
-    actual_up = actual_up*(realPlaneHeight/2);
+    up = up*(realPlaneHeight/2);
     right = right*(realPlaneHeight/2);
 
     for (int i = 0; i < size; ++i) {
@@ -57,7 +57,7 @@ int main() {
             double iNorm = (i - size / 2) / (double) size;
             double jNorm = -(j - size / 2) / (double) size;
 
-            Vector3 vecPosOnPlane = dir + (actual_up*iNorm) + (right*jNorm);
+            Vector3 vecPosOnPlane = dir + (up*iNorm) + (right*jNorm);
 
             Point vectorPositionOnPlane{vecPosOnPlane.xCoord,
                                         vecPosOnPlane.yCoord,
