@@ -1,9 +1,10 @@
 #pragma once
+
 #include <cstdint>
 #include <string>
 #include <fstream>
 
-struct Pixel{
+struct Pixel {
     uint8_t redComponent;
     uint8_t greenComponent;
     uint8_t blueComponent;
@@ -32,29 +33,30 @@ private:
 
 
     //Информация о пикселях
-    Pixel** pixels;
+    Pixel **pixels;
 
     //Запись массива пикселей в файл
-    void writePixelsToFile(const std::string& address) const;
+    void writePixelsToFile(const std::string &address) const;
 
     //Запись строки массива в файл
     void writeLine(std::ofstream &file, int proceededLines) const;
 
     //Запись хедера в файл
-    void writeHeader(const std::string& filePath);
+    void writeHeader(const std::string &filePath);
 
 public:
     //Запись в .bmp файл
-    void writeToFile(const std::string& filePath);
+    void writeToFile(const std::string &filePath);
 
     //Оператор индексации, чтобы тебе жилось проще
-    Pixel*& operator[](int index);
+    Pixel *&operator[](int index);
 
     //Конструктор
     bitmapRender(int32_t width, int32_t depth);
 
     //Геттеры глубины и ширины
     int32_t getWidth() const;
+
     int32_t getDepth() const;
 
 
